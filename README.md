@@ -92,6 +92,43 @@ output/
 
 ## 📖 Usage
 
+### Using the Web API
+
+Start the API server:
+
+```bash
+# Using uvicorn directly
+uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000
+
+# Or using Docker
+docker-compose up
+```
+
+Access the interactive API documentation at: `http://localhost:8000`
+
+Create a campaign via API:
+
+```bash
+curl -X POST http://localhost:8000/api/v1/campaigns/create \
+  -H "Content-Type: application/json" \
+  -d '{
+    "products": [
+      {"name": "Product A", "description": "Amazing product"},
+      {"name": "Product B"}
+    ],
+    "target_region": "North America",
+    "target_audience": "Young professionals",
+    "campaign_message": "Limited time offer!",
+    "language": "en"
+  }'
+```
+
+Check campaign status:
+
+```bash
+curl http://localhost:8000/api/v1/campaigns/{campaign_id}
+```
+
 ### Campaign Brief Format
 
 Create a JSON file with the following structure:
@@ -270,22 +307,52 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed system design, component int
 - Cost: ~$0.12 (standard quality)
 - Assets reused from cache: $0.00
 
-## 🚧 Known Limitations
+## ✨ Enterprise Features (v2.0)
 
-- English text only (localization is future enhancement)
-- Basic logo detection (template matching, not ML-based)
-- Local storage only (cloud integration planned)
-- Single campaign processing (batch mode planned)
+### Multi-Language Support
+- ✅ 9 languages supported: EN, ES, FR, DE, IT, PT, ZH, JA, KO
+- ✅ OpenAI GPT-4 powered translations
+- ✅ Translation caching to reduce API costs
+- ✅ Context-aware marketing translations
+
+### Cloud Storage Integration
+- ✅ AWS S3 support
+- ✅ Azure Blob Storage support
+- ✅ Google Cloud Storage support
+- ✅ Local filesystem (default)
+- ✅ Easy provider switching via configuration
+
+### Batch Processing
+- ✅ Process 50+ campaigns concurrently
+- ✅ Queue management system
+- ✅ Progress tracking and status updates
+- ✅ Automatic retry logic
+
+### Web API Interface
+- ✅ FastAPI REST API
+- ✅ Campaign creation endpoints
+- ✅ Real-time status tracking
+- ✅ Swagger UI documentation
+- ✅ Optional API key authentication
+
+### Advanced AI Features
+- ✅ OpenAI Vision API logo detection
+- ✅ Video generation from static images (FFmpeg-based)
+- ✅ Placeholder for OpenAI video API (when available)
+
+### DevOps Ready
+- ✅ Docker containerization
+- ✅ Docker Compose for easy deployment
+- ✅ Health check endpoints
+- ✅ Comprehensive logging
 
 ## 🔮 Future Enhancements
 
-- [ ] Multi-language support
-- [ ] Advanced ML-based logo detection
-- [ ] Cloud storage integration (AWS S3, Azure Blob)
-- [ ] Batch campaign processing
-- [ ] Web interface
 - [ ] A/B testing recommendations
-- [ ] Video generation support
+- [ ] Real-time collaboration features
+- [ ] Advanced analytics dashboard
+- [ ] CDN integration for asset delivery
+- [ ] Multi-tenant support
 
 ## 📚 Additional Resources
 

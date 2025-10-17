@@ -1,0 +1,50 @@
+# Docker ignore file
+# Exclude files and directories from Docker build context
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+FDE Take Home Lite (1).pdf
+
+# Test coverage
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Logs and output (mounted as volumes)
+logs/*.log
+logs/*.txt
+output/*/
+
+# Temporary files
+*.tmp
+.DS_Store
+
+# Environment
+.env
+
+# Translation cache (mounted as volume)
+.translation_cache/
+
+# Demo recordings
+demo/
+

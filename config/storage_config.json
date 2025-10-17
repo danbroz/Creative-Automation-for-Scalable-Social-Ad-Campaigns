@@ -1,0 +1,44 @@
+{
+  "_comment": "Storage Configuration - Select storage backend for campaign assets",
+  "_providers": "Supported: local, s3, azure, gcs",
+  
+  "provider": "local",
+  
+  "local": {
+    "base_path": "output/",
+    "_comment": "Local filesystem storage - default option, no cloud dependencies"
+  },
+  
+  "s3": {
+    "_comment": "Amazon S3 Configuration - Uncomment and fill in to use",
+    "_enabled": false,
+    "bucket": "your-campaign-assets-bucket",
+    "region": "us-east-1",
+    "prefix": "campaigns/",
+    "_auth_note": "Provide credentials here OR use IAM roles OR AWS CLI config",
+    "access_key_id": "",
+    "secret_access_key": ""
+  },
+  
+  "azure": {
+    "_comment": "Azure Blob Storage Configuration - Uncomment and fill in to use",
+    "_enabled": false,
+    "account_name": "yourstorageaccount",
+    "account_key": "",
+    "container": "campaign-assets",
+    "prefix": "campaigns/",
+    "_alternative": "Can use connection_string instead of account_name/account_key",
+    "connection_string": ""
+  },
+  
+  "gcs": {
+    "_comment": "Google Cloud Storage Configuration - Uncomment and fill in to use",
+    "_enabled": false,
+    "bucket": "your-campaign-assets-bucket",
+    "project_id": "your-gcp-project-id",
+    "prefix": "campaigns/",
+    "_auth_note": "Provide credentials_path OR use Application Default Credentials",
+    "credentials_path": ""
+  }
+}
+

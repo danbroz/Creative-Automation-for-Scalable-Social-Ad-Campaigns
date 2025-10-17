@@ -10,6 +10,20 @@
       "retry_delay": 2
     }
   },
+  "vision_model": "gpt-4-vision-preview",
+  "vision_settings": {
+    "max_tokens": 300,
+    "detail": "high",
+    "timeout": 30,
+    "max_retries": 3
+  },
+  "translation_model": "gpt-4",
+  "translation_settings": {
+    "temperature": 0.3,
+    "max_tokens": 1000,
+    "timeout": 30,
+    "max_retries": 3
+  },
   "alternative_models": [
     {
       "name": "dall-e-2",
@@ -25,7 +39,9 @@
   "pricing": {
     "dall-e-3_standard_1024": 0.040,
     "dall-e-3_hd_1024": 0.080,
-    "dall-e-2_1024": 0.020
+    "dall-e-2_1024": 0.020,
+    "gpt-4-vision_per_request": 0.01,
+    "gpt-4_per_1k_tokens": 0.03
   }
 }
 

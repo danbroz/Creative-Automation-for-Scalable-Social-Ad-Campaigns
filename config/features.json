@@ -1,0 +1,78 @@
+{
+  "_comment": "Feature Flags - Enable/disable specific features",
+  "_note": "Set to true to enable, false to disable",
+  
+  "features": {
+    "multi_language": {
+      "enabled": true,
+      "description": "Multi-language translation support for campaign messages"
+    },
+    "cloud_storage": {
+      "enabled": true,
+      "description": "Cloud storage integration (S3, Azure, GCS)"
+    },
+    "batch_processing": {
+      "enabled": true,
+      "description": "Process multiple campaigns in batch mode"
+    },
+    "vision_api_logo_detection": {
+      "enabled": true,
+      "description": "Use OpenAI Vision API for advanced logo detection"
+    },
+    "video_generation": {
+      "enabled": false,
+      "description": "Generate video ads from static images (experimental)",
+      "_note": "Set to true when OpenAI video API is available or to use FFmpeg fallback"
+    },
+    "web_api": {
+      "enabled": true,
+      "description": "FastAPI REST API interface"
+    },
+    "translation_cache": {
+      "enabled": true,
+      "description": "Cache translations to reduce API costs"
+    },
+    "performance_monitoring": {
+      "enabled": true,
+      "description": "Detailed performance metrics and monitoring"
+    },
+    "async_processing": {
+      "enabled": true,
+      "description": "Async/parallel processing for better performance"
+    }
+  },
+  
+  "limits": {
+    "max_concurrent_campaigns": 50,
+    "max_products_per_campaign": 20,
+    "max_campaign_message_length": 500,
+    "max_batch_size": 100,
+    "api_timeout_seconds": 60,
+    "max_retries": 3
+  },
+  
+  "performance": {
+    "enable_caching": true,
+    "cache_ttl_seconds": 86400,
+    "parallel_image_generation": false,
+    "max_workers": 4,
+    "_note": "parallel_image_generation may incur higher API costs"
+  },
+  
+  "security": {
+    "require_api_key": false,
+    "api_key_header": "X-API-Key",
+    "enable_rate_limiting": false,
+    "max_requests_per_minute": 60,
+    "_note": "Enable these for production deployments"
+  },
+  
+  "logging": {
+    "log_level": "INFO",
+    "log_to_file": true,
+    "log_to_console": true,
+    "detailed_metrics": true,
+    "save_execution_reports": true
+  }
+}
+

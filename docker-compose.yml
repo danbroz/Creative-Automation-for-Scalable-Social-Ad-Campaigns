@@ -1,0 +1,38 @@
+# Docker Compose configuration for Creative Automation Pipeline
+# Provides easy deployment of the entire stack
+
+version: '3.8'
+
+services:
+  # Main API service
+  api:
+    build: .
+    container_name: creative-automation-api
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./output:/app/output
+      - ./logs:/app/logs
+      - ./config:/app/config
+      - ./.translation_cache:/app/.translation_cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: Redis for queue management (for production scaling)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: creative-automation-redis
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+
+volumes:
+  output:
+  logs:
+

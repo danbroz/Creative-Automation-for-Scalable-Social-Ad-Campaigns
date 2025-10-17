@@ -1,0 +1,114 @@
+{
+  "_comment": "Language Configuration for Multi-Language Campaign Support",
+  
+  "default_language": "en",
+  
+  "supported_languages": {
+    "en": {
+      "name": "English",
+      "native_name": "English",
+      "code": "en",
+      "direction": "ltr",
+      "font_family": "Arial",
+      "requires_special_font": false
+    },
+    "es": {
+      "name": "Spanish",
+      "native_name": "Español",
+      "code": "es",
+      "direction": "ltr",
+      "font_family": "Arial",
+      "requires_special_font": false
+    },
+    "fr": {
+      "name": "French",
+      "native_name": "Français",
+      "code": "fr",
+      "direction": "ltr",
+      "font_family": "Arial",
+      "requires_special_font": false
+    },
+    "de": {
+      "name": "German",
+      "native_name": "Deutsch",
+      "code": "de",
+      "direction": "ltr",
+      "font_family": "Arial",
+      "requires_special_font": false
+    },
+    "it": {
+      "name": "Italian",
+      "native_name": "Italiano",
+      "code": "it",
+      "direction": "ltr",
+      "font_family": "Arial",
+      "requires_special_font": false
+    },
+    "pt": {
+      "name": "Portuguese",
+      "native_name": "Português",
+      "code": "pt",
+      "direction": "ltr",
+      "font_family": "Arial",
+      "requires_special_font": false
+    },
+    "zh": {
+      "name": "Chinese (Simplified)",
+      "native_name": "简体中文",
+      "code": "zh",
+      "direction": "ltr",
+      "font_family": "Noto Sans CJK SC",
+      "requires_special_font": true,
+      "font_fallbacks": ["Arial Unicode MS", "SimHei"]
+    },
+    "zh-TW": {
+      "name": "Chinese (Traditional)",
+      "native_name": "繁體中文",
+      "code": "zh-TW",
+      "direction": "ltr",
+      "font_family": "Noto Sans CJK TC",
+      "requires_special_font": true,
+      "font_fallbacks": ["Arial Unicode MS", "MingLiU"]
+    },
+    "ja": {
+      "name": "Japanese",
+      "native_name": "日本語",
+      "code": "ja",
+      "direction": "ltr",
+      "font_family": "Noto Sans CJK JP",
+      "requires_special_font": true,
+      "font_fallbacks": ["Arial Unicode MS", "MS Gothic"]
+    },
+    "ko": {
+      "name": "Korean",
+      "native_name": "한국어",
+      "code": "ko",
+      "direction": "ltr",
+      "font_family": "Noto Sans CJK KR",
+      "requires_special_font": true,
+      "font_fallbacks": ["Arial Unicode MS", "Gulim"]
+    }
+  },
+  
+  "translation_settings": {
+    "cache_translations": true,
+    "cache_directory": ".translation_cache/",
+    "use_openai_gpt4": true,
+    "openai_model": "gpt-4",
+    "max_retries": 3,
+    "timeout": 30
+  },
+  
+  "font_settings": {
+    "fallback_font": "Arial",
+    "unicode_font": "Arial Unicode MS",
+    "font_size_multiplier": {
+      "zh": 1.0,
+      "zh-TW": 1.0,
+      "ja": 1.0,
+      "ko": 1.0,
+      "_comment": "Adjust font sizes for different languages if needed"
+    }
+  }
+}
+
