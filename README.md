@@ -49,17 +49,35 @@ pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```
 
-### 2. Configuration
+### 2. Database Setup (Optional for Advanced Features)
+
+For enterprise features (A/B testing, analytics, multi-tenant), setup PostgreSQL:
+
+```bash
+# Install PostgreSQL
+sudo apt-get install postgresql postgresql-contrib
+
+# Create database
+sudo -u postgres createdb creative_automation
+
+# Initialize database schema
+python -c "from src.database import init_database; init_database()"
+```
+
+See [DATABASE_SETUP.md](DATABASE_SETUP.md) for detailed instructions.
+
+### 3. Configuration
 
 ```bash
 # Copy the example environment file
 cp .env.example .env
 
-# Edit .env and add your OpenAI API key
+# Edit .env and add your OpenAI API key and database URL
 # OPENAI_API_KEY=your_key_here
+# DATABASE_URL=postgresql://postgres:postgres@localhost:5432/creative_automation
 ```
 
-### 3. Run Your First Campaign
+### 4. Run Your First Campaign
 
 ```bash
 # Run example campaign
@@ -71,7 +89,7 @@ python -m src.main examples/campaign_brief_1.json
 python -m src.main examples/campaign_brief_1.json --verbose
 ```
 
-### 4. Check Output
+### 5. Check Output
 
 Your generated assets will be in:
 ```
@@ -307,7 +325,16 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed system design, component int
 - Cost: ~$0.12 (standard quality)
 - Assets reused from cache: $0.00
 
-## ✨ Enterprise Features (v2.0)
+## ✨ Enterprise Features (v2.0 - v2.1)
+
+### Database-Powered Features (v2.1)
+- ✅ PostgreSQL integration with SQLAlchemy ORM
+- ✅ Complete database schema (15+ tables)
+- ✅ Ready for: A/B testing, Analytics, Multi-tenant, Collaboration
+- ✅ Database migrations with Alembic
+- ✅ Connection pooling and session management
+
+### Core Features (v2.0)
 
 ### Multi-Language Support
 - ✅ 9 languages supported: EN, ES, FR, DE, IT, PT, ZH, JA, KO
