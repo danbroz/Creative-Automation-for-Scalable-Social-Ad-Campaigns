@@ -49,12 +49,10 @@ app = FastAPI(
     title="Creative Automation Pipeline API",
     description="AI-powered creative automation for scalable social ad campaigns",
     version="2.0.0",
-    docs_url="/api/docs",  # Swagger UI at /api/docs
-    redoc_url="/api/redoc"
+    docs_url="/docs",  # Swagger UI at /docs
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
-
-# Mount static files
-app.mount("/static", StaticFiles(directory="web/static"), name="static")
 
 # CORS middleware - configure for production
 app.add_middleware(
@@ -64,6 +62,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files (must be done after middleware but before routes)
+app.mount("/static", StaticFiles(directory="web/static"), name="static")
 
 # Global campaign queue
 campaign_queue = CampaignQueue()
@@ -123,10 +124,15 @@ async def verify_api_key(x_api_key: Optional[str] = Header(None)):
 # Web UI Routes
 # ============================================================================
 
-@app.get("/", response_class=FileResponse)
+@app.get("/dashboard", response_class=FileResponse)
 async def serve_dashboard():
     """Serve the main dashboard page."""
     return FileResponse("web/index.html")
+
+@app.get("/")
+async def root():
+    """Redirect root to dashboard."""
+    return RedirectResponse(url="/dashboard")
 
 @app.get("/create-campaign.html", response_class=FileResponse)
 async def serve_create_campaign():
