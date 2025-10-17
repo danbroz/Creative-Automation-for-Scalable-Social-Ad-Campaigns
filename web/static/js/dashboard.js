@@ -58,8 +58,27 @@ class Dashboard {
                 this.updateRecentCampaigns(stats.recent_campaigns);
             }
             
+            // Update last updated timestamp
+            this.updateLastUpdatedTime();
+            
         } catch (error) {
             console.error('Error loading statistics:', error);
+        }
+    }
+    
+    /**
+     * Update the last updated timestamp
+     */
+    updateLastUpdatedTime() {
+        const lastUpdatedEl = document.getElementById('last-updated');
+        if (lastUpdatedEl) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            lastUpdatedEl.textContent = `Updated at ${timeStr}`;
         }
     }
 
