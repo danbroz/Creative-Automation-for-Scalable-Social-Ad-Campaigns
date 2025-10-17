@@ -214,10 +214,14 @@ output/
 ```bash
 # Run all tests
 pytest
+```
 
+```bash
 # Run with coverage report
 pytest --cov=src --cov-report=html
+```
 
+```bash
 # Run specific test file
 pytest tests/test_brief_parser.py
 ```
