@@ -1,0 +1,69 @@
+{
+  "_comment": "CDN Integration Configuration",
+  
+  "provider": "cloudflare",
+  "enabled": true,
+  "auto_upload": true,
+  "cache_ttl_seconds": 2592000,
+  
+  "cloudflare": {
+    "api_token": "",
+    "zone_id": "",
+    "account_id": "",
+    "r2_bucket": "campaign-assets",
+    "images_variant": "public"
+  },
+  
+  "cloudfront": {
+    "distribution_id": "",
+    "s3_bucket": "campaign-assets",
+    "region": "us-east-1",
+    "signed_urls": false,
+    "key_pair_id": ""
+  },
+  
+  "fastly": {
+    "api_token": "",
+    "service_id": ""
+  },
+  
+  "image_optimization": {
+    "enabled": true,
+    "formats": ["webp", "avif"],
+    "quality": 85,
+    "auto_format": true,
+    "responsive_breakpoints": [320, 768, 1024, 1920]
+  },
+  
+  "transformations": {
+    "resize": {
+      "enabled": true,
+      "fit": "cover",
+      "maintain_aspect_ratio": true
+    },
+    "compression": {
+      "enabled": true,
+      "quality_min": 60,
+      "quality_max": 95
+    },
+    "effects": {
+      "enabled": true,
+      "allowed": ["blur", "sharpen", "grayscale"]
+    }
+  },
+  
+  "caching": {
+    "enabled": true,
+    "ttl_seconds": 2592000,
+    "stale_while_revalidate": true,
+    "purge_on_update": true
+  },
+  
+  "security": {
+    "signed_urls": false,
+    "url_expiry_seconds": 3600,
+    "allowed_domains": [],
+    "hotlink_protection": false
+  }
+}
+

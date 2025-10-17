@@ -1,0 +1,38 @@
+{
+  "_comment": "A/B Testing Configuration",
+  
+  "max_variants_per_test": 5,
+  "min_sample_size": 1000,
+  "confidence_level": 0.95,
+  "auto_declare_winner": true,
+  "winner_threshold_days": 14,
+  
+  "variant_generation": {
+    "colors": {
+      "enabled": true,
+      "num_variants": 3
+    },
+    "text": {
+      "enabled": true,
+      "num_variants": 2
+    },
+    "layout": {
+      "enabled": false,
+      "num_variants": 2
+    }
+  },
+  
+  "statistical_settings": {
+    "test_type": "chi_square",
+    "alpha": 0.05,
+    "power": 0.8,
+    "effect_size": 0.1
+  },
+  
+  "ml_recommendations": {
+    "enabled": true,
+    "model_type": "random_forest",
+    "min_training_samples": 50
+  }
+}
+

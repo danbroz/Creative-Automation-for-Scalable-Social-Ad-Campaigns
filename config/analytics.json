@@ -1,0 +1,54 @@
+{
+  "_comment": "Advanced Analytics Configuration",
+  
+  "data_retention_days": 90,
+  "aggregation_intervals": ["hour", "day", "week", "month"],
+  "dashboard_refresh_seconds": 30,
+  
+  "metrics": {
+    "campaigns": {
+      "enabled": true,
+      "track": ["created", "completed", "failed", "duration", "cost"]
+    },
+    "assets": {
+      "enabled": true,
+      "track": ["generated", "viewed", "clicked", "conversions"]
+    },
+    "api": {
+      "enabled": true,
+      "track": ["calls", "errors", "latency", "cost"]
+    },
+    "users": {
+      "enabled": true,
+      "track": ["logins", "sessions", "activities"]
+    }
+  },
+  
+  "dashboards": {
+    "overview": {
+      "enabled": true,
+      "metrics": ["total_campaigns", "total_assets", "api_calls", "active_users"]
+    },
+    "performance": {
+      "enabled": true,
+      "charts": ["campaign_trends", "asset_performance", "cost_analysis"]
+    },
+    "ab_testing": {
+      "enabled": true,
+      "charts": ["test_results", "winner_comparison", "conversion_rates"]
+    }
+  },
+  
+  "exports": {
+    "formats": ["pdf", "csv", "excel", "json"],
+    "max_rows": 10000,
+    "include_charts": true
+  },
+  
+  "real_time": {
+    "enabled": true,
+    "update_interval_seconds": 5,
+    "metrics": ["active_users", "api_calls", "campaign_status"]
+  }
+}
+

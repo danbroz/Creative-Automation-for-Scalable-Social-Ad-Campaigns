@@ -1,0 +1,44 @@
+{
+  "_comment": "Real-Time Collaboration Configuration",
+  
+  "websocket_enabled": true,
+  "websocket_port": 8000,
+  "max_connections_per_campaign": 50,
+  "connection_timeout_seconds": 300,
+  
+  "presence": {
+    "enabled": true,
+    "timeout_seconds": 300,
+    "ping_interval_seconds": 30
+  },
+  
+  "comments": {
+    "enabled": true,
+    "max_length": 1000,
+    "allow_mentions": true,
+    "allow_threading": true
+  },
+  
+  "activity_feed": {
+    "enabled": true,
+    "retention_days": 30,
+    "max_events_per_page": 50
+  },
+  
+  "concurrent_editing": {
+    "enabled": true,
+    "lock_timeout_seconds": 300,
+    "conflict_resolution": "last_write_wins"
+  },
+  
+  "notifications": {
+    "enabled": true,
+    "channels": ["websocket", "email"],
+    "events": [
+      "comment_added",
+      "asset_updated",
+      "campaign_completed"
+    ]
+  }
+}
+

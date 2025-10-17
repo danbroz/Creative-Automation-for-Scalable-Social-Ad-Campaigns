@@ -1,0 +1,91 @@
+{
+  "_comment": "Multi-Tenant Configuration",
+  
+  "multi_tenant_enabled": true,
+  "isolation_level": "strict",
+  "allow_self_registration": true,
+  "default_tier": "free",
+  "require_email_verification": true,
+  
+  "subdomain": {
+    "enabled": true,
+    "base_domain": "platform.example.com",
+    "reserved_subdomains": ["www", "api", "admin", "app", "dashboard"]
+  },
+  
+  "tiers": {
+    "free": {
+      "name": "Free",
+      "price_usd_monthly": 0,
+      "max_campaigns": 10,
+      "max_storage_gb": 5,
+      "max_api_calls_per_month": 1000,
+      "max_users": 3,
+      "features": [
+        "basic_campaigns",
+        "multi_language",
+        "cloud_storage"
+      ]
+    },
+    "pro": {
+      "name": "Professional",
+      "price_usd_monthly": 99,
+      "max_campaigns": 100,
+      "max_storage_gb": 50,
+      "max_api_calls_per_month": 10000,
+      "max_users": 10,
+      "features": [
+        "basic_campaigns",
+        "multi_language",
+        "cloud_storage",
+        "ab_testing",
+        "analytics",
+        "collaboration",
+        "priority_support"
+      ]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price_usd_monthly": 499,
+      "max_campaigns": -1,
+      "max_storage_gb": 500,
+      "max_api_calls_per_month": -1,
+      "max_users": -1,
+      "features": [
+        "all",
+        "cdn",
+        "custom_branding",
+        "sso",
+        "dedicated_support",
+        "sla"
+      ]
+    }
+  },
+  
+  "resource_limits": {
+    "enforce_quotas": true,
+    "soft_limit_warning_percent": 80,
+    "grace_period_days": 7
+  },
+  
+  "billing": {
+    "enabled": false,
+    "provider": "stripe",
+    "billing_cycle": "monthly",
+    "trial_days": 14,
+    "prorate_upgrades": true
+  },
+  
+  "data_isolation": {
+    "strict_mode": true,
+    "cross_tenant_queries_allowed": false,
+    "super_admin_override": true
+  },
+  
+  "branding": {
+    "allow_custom_logos": ["pro", "enterprise"],
+    "allow_custom_colors": ["pro", "enterprise"],
+    "allow_custom_domains": ["enterprise"]
+  }
+}
+
