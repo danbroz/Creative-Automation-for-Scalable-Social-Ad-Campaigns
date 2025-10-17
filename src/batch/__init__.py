@@ -21,7 +21,7 @@ Usage:
 """
 
 from .batch_processor import BatchProcessor
-from .campaign_queue import CampaignQueue
+from .campaign_queue import CampaignQueue, CampaignStatus
 
-__all__ = ['BatchProcessor', 'CampaignQueue']
+__all__ = ['BatchProcessor', 'CampaignQueue', 'CampaignStatus']
 

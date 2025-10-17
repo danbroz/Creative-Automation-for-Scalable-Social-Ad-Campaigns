@@ -17,6 +17,7 @@ services:
       - ./logs:/app/logs
       - ./config:/app/config
       - ./.translation_cache:/app/.translation_cache
+      - ./creative_automation.db:/app/creative_automation.db
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
