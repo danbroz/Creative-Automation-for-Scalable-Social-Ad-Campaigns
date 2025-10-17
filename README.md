@@ -33,8 +33,8 @@ This pipeline automates the creation of social media ad campaign assets by:
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd creative-automation-pipeline
+git clone https://github.com/danbroz/Creatve-Automation-for-Scalable-Social-Ad-Campaigns.git
+cd Creatve-Automation-for-Scalable-Social-Ad-Campaigns
 
 # Create virtual environment
 python -m venv venv
@@ -42,7 +42,9 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+```
 
+```bash
 # For development (includes testing tools)
 pip install -r requirements-dev.txt
 ```
@@ -62,7 +64,9 @@ cp .env.example .env
 ```bash
 # Run example campaign
 python -m src.main examples/campaign_brief_1.json
+```
 
+```bash
 # With verbose output
 python -m src.main examples/campaign_brief_1.json --verbose
 ```
