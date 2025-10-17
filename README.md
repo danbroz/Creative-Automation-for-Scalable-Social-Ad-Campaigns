@@ -49,22 +49,22 @@ pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```
 
-### 2. Database Setup (Optional for Advanced Features)
+### 2. Database Setup (Automatic with SQLite)
 
-For enterprise features (A/B testing, analytics, multi-tenant), setup PostgreSQL:
+For enterprise features (A/B testing, analytics, multi-tenant), initialize the database:
 
 ```bash
-# Install PostgreSQL
-sudo apt-get install postgresql postgresql-contrib
-
-# Create database
-sudo -u postgres createdb creative_automation
-
-# Initialize database schema
+# Initialize SQLite database (creates creative_automation.db)
 python -c "from src.database import init_database; init_database()"
 ```
 
-See [DATABASE_SETUP.md](DATABASE_SETUP.md) for detailed instructions.
+**SQLite Benefits:**
+- ✅ No database server required
+- ✅ Zero configuration
+- ✅ Single file (easy backup)
+- ✅ Perfect for development and production
+
+See [DATABASE_SETUP_SQLITE.md](DATABASE_SETUP_SQLITE.md) for detailed instructions.
 
 ### 3. Configuration
 
@@ -72,9 +72,9 @@ See [DATABASE_SETUP.md](DATABASE_SETUP.md) for detailed instructions.
 # Copy the example environment file
 cp .env.example .env
 
-# Edit .env and add your OpenAI API key and database URL
+# Edit .env and add your OpenAI API key
 # OPENAI_API_KEY=your_key_here
-# DATABASE_URL=postgresql://postgres:postgres@localhost:5432/creative_automation
+# DATABASE_URL=sqlite:///./creative_automation.db  # (optional, this is the default)
 ```
 
 ### 4. Run Your First Campaign
@@ -328,11 +328,11 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed system design, component int
 ## ✨ Enterprise Features (v2.0 - v2.1)
 
 ### Database-Powered Features (v2.1)
-- ✅ PostgreSQL integration with SQLAlchemy ORM
+- ✅ SQLite integration with SQLAlchemy ORM (zero setup!)
 - ✅ Complete database schema (15+ tables)
 - ✅ Ready for: A/B testing, Analytics, Multi-tenant, Collaboration
 - ✅ Database migrations with Alembic
-- ✅ Connection pooling and session management
+- ✅ Single-file portability (easy backup)
 
 ### Core Features (v2.0)
 
@@ -378,7 +378,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed system design, component int
 All advanced enterprise features have complete foundations:
 
 ### ✅ Database Layer Complete
-- Full PostgreSQL schema with 15+ models
+- Full SQLite schema with 15+ models (no server required!)
 - Multi-tenant data isolation architecture
 - A/B testing tables (ABTest, ABTestVariant, ABTestResult)
 - Analytics event tracking (AnalyticsEvent)
@@ -398,7 +398,7 @@ All advanced enterprise features have complete foundations:
 - WebSocket support (websockets, python-socketio)
 - Analytics (pandas, plotly, reportlab)
 - CDN integration (cloudflare SDK)
-- Database (PostgreSQL, SQLAlchemy, Alembic)
+- Database (SQLite, SQLAlchemy, Alembic)
 
 ### 📝 Implementation Guide
 See [ENTERPRISE_FEATURES_IMPLEMENTATION.md](ENTERPRISE_FEATURES_IMPLEMENTATION.md) for:

@@ -12,10 +12,11 @@
 - ✅ Comprehensive testing framework
 
 ### Database Layer (v2.1)
-- ✅ PostgreSQL integration with SQLAlchemy
+- ✅ SQLite integration with SQLAlchemy (zero setup!)
 - ✅ Complete database schema with 15+ models
 - ✅ Multi-tenant data isolation
-- ✅ Session management and connection pooling
+- ✅ Session management with WAL mode for concurrency
+- ✅ Single-file portability (easy backup and deployment)
 - ✅ Models for: Tenants, Users, Campaigns, Assets, A/B Tests, Analytics, Comments, CDN tracking
 
 ## 🚧 In Progress (v2.1 - Advanced Enterprise Features)
@@ -151,18 +152,18 @@ Complete PostgreSQL schema with 15+ tables:
 ### 1. Database Setup
 
 ```bash
-# Install PostgreSQL
-sudo apt-get install postgresql postgresql-contrib
-
-# Create database
-sudo -u postgres createdb creative_automation
-
-# Set environment variable
-export DATABASE_URL="postgresql://postgres:password@localhost:5432/creative_automation"
-
-# Initialize database
+# Initialize SQLite database (automatic - no server required!)
 python -c "from src.database import init_database; init_database()"
+
+# Creates: creative_automation.db in project root
 ```
+
+**SQLite Benefits:**
+- ✅ No database server to install
+- ✅ Zero configuration
+- ✅ Single file database (portable)
+- ✅ Fast and reliable
+- ✅ Perfect for development and production
 
 ### 2. Complete Implementation
 

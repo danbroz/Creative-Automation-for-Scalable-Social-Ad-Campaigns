@@ -29,9 +29,8 @@ ffmpeg-python>=0.2.0
 # Additional Utilities
 pydantic-settings>=2.0.0
 
-# Database (PostgreSQL)
+# Database (SQLite via SQLAlchemy)
 sqlalchemy>=2.0.0
-psycopg2-binary>=2.9.0
 alembic>=1.12.0
 
 # A/B Testing & Machine Learning

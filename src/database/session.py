@@ -3,11 +3,18 @@ Database Session Management
 ============================
 
 SQLAlchemy session management and database initialization.
-Provides session factory and engine configuration for PostgreSQL.
+Provides session factory and engine configuration for SQLite.
 
-Environment Variables Required:
-    DATABASE_URL - PostgreSQL connection string
-    Example: postgresql://user:password@localhost:5432/creative_automation
+SQLite Benefits:
+    - No separate database server required
+    - Single file storage (portable)
+    - Perfect for development and small-medium deployments
+    - All SQL features needed for enterprise features
+    - Easy backup (just copy the .db file)
+
+Environment Variables (Optional):
+    DATABASE_URL - Custom SQLite database path
+    Default: sqlite:///./creative_automation.db
     
 Usage:
     from src.database import init_database, get_session
@@ -23,8 +30,9 @@ Usage:
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.pool import QueuePool
+from sqlalchemy.pool import StaticPool
 from contextlib import contextmanager
+from pathlib import Path
 from dotenv import load_dotenv
 
 from .models import Base
@@ -33,21 +41,49 @@ from .models import Base
 load_dotenv()
 
 # Database configuration
+# SQLite database file will be created in the project root
 DATABASE_URL = os.getenv(
     'DATABASE_URL',
-    'postgresql://postgres:postgres@localhost:5432/creative_automation'
+    'sqlite:///./creative_automation.db'
 )
 
-# Create engine with connection pooling
-# Pool settings optimized for web application with concurrent requests
+# Ensure the database directory exists
+if DATABASE_URL.startswith('sqlite:///'):
+    db_path = DATABASE_URL.replace('sqlite:///', '')
+    if '/' in db_path:
+        db_dir = Path(db_path).parent
+        db_dir.mkdir(parents=True, exist_ok=True)
+
+# Create engine with SQLite-specific settings
+# SQLite configuration optimized for concurrent access
 engine = create_engine(
     DATABASE_URL,
-    poolclass=QueuePool,
-    pool_size=10,  # Number of permanent connections
-    max_overflow=20,  # Additional connections when pool is full
-    pool_pre_ping=True,  # Verify connections before using
-    echo=False  # Set to True for SQL query logging (development only)
+    # Use StaticPool for SQLite to avoid connection issues
+    # This keeps connections open for reuse
+    poolclass=StaticPool,
+    
+    # Enable foreign key constraints (disabled by default in SQLite)
+    connect_args={
+        'check_same_thread': False,  # Allow multi-threaded access
+        'timeout': 30  # Wait up to 30 seconds for lock to be released
+    },
+    
+    # Set to True for SQL query logging (development only)
+    echo=False
 )
+
+# Enable foreign keys for SQLite (must be done per connection)
+from sqlalchemy import event
+@event.listens_for(engine, "connect")
+def set_sqlite_pragma(dbapi_conn, connection_record):
+    """Enable foreign key support and other SQLite optimizations."""
+    cursor = dbapi_conn.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.execute("PRAGMA journal_mode=WAL")  # Write-Ahead Logging for better concurrency
+    cursor.execute("PRAGMA synchronous=NORMAL")  # Good balance of safety and speed
+    cursor.execute("PRAGMA cache_size=-64000")  # 64MB cache
+    cursor.execute("PRAGMA temp_store=MEMORY")  # Store temp tables in memory
+    cursor.close()
 
 # Session factory
 SessionFactory = sessionmaker(bind=engine)

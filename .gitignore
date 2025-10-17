@@ -62,3 +62,15 @@ assets/products/*.jpg
 demo/*.mp4
 demo/*.webm
 
+# Database files
+*.db
+*.db-shm
+*.db-wal
+creative_automation.db*
+
+# Translation cache
+.translation_cache/
+
+# Alembic
+alembic/versions/*.py
+!alembic/versions/.gitkeep
