@@ -233,8 +233,8 @@ class APIClient {
         // Check products
         if (!briefData.products || !Array.isArray(briefData.products)) {
             errors.push('Products must be an array');
-        } else if (briefData.products.length < 2) {
-            errors.push('At least 2 products are required');
+        } else if (briefData.products.length < 1) {
+            errors.push('At least 1 product is required');
         } else {
             briefData.products.forEach((product, idx) => {
                 if (!product.name || product.name.trim() === '') {

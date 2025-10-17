@@ -19,7 +19,7 @@ class CampaignForm {
         this.totalSteps = 4;
         this.formData = {
             campaign_name: '',
-            products: [{name: '', description: ''}, {name: '', description: ''}],
+            products: [{name: '', description: ''}],
             target_region: '',
             target_audience: '',
             campaign_message: '',
@@ -204,7 +204,7 @@ class CampaignForm {
     validateProducts() {
         const products = this.getProducts();
         
-        if (products.length < 2) {
+        if (products.length < 1) {
             return false;
         }
         
@@ -321,7 +321,7 @@ class CampaignForm {
             <div class="product-item bg-gray-50 p-4 rounded-lg mb-4">
                 <div class="flex justify-between items-center mb-2">
                     <h4 class="font-medium">Product ${index + 1}</h4>
-                    ${index >= 2 ? `<button type="button" class="text-red-600 hover:text-red-700" 
+                    ${index >= 1 ? `<button type="button" class="text-red-600 hover:text-red-700" 
                                            onclick="campaignForm.removeProduct(${index})">Remove</button>` : ''}
                 </div>
                 <input type="text" class="product-name form-input w-full mb-2" 
@@ -345,7 +345,7 @@ class CampaignForm {
      * @param {number} index - Product index
      */
     removeProduct(index) {
-        if (this.formData.products.length > 2) {
+        if (this.formData.products.length > 1) {
             this.formData.products.splice(index, 1);
             this.renderProducts();
         }
