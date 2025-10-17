@@ -27,8 +27,9 @@ Example Usage:
 """
 
 from fastapi import FastAPI, HTTPException, File, UploadFile, Depends, Header
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict
 import json
@@ -48,9 +49,12 @@ app = FastAPI(
     title="Creative Automation Pipeline API",
     description="AI-powered creative automation for scalable social ad campaigns",
     version="2.0.0",
-    docs_url="/",  # Swagger UI at root
-    redoc_url="/redoc"
+    docs_url="/api/docs",  # Swagger UI at /api/docs
+    redoc_url="/api/redoc"
 )
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="web/static"), name="static")
 
 # CORS middleware - configure for production
 app.add_middleware(
@@ -115,7 +119,33 @@ async def verify_api_key(x_api_key: Optional[str] = Header(None)):
     except Exception:
         pass  # Continue if config not found
 
+# ============================================================================
+# Web UI Routes
+# ============================================================================
+
+@app.get("/", response_class=FileResponse)
+async def serve_dashboard():
+    """Serve the main dashboard page."""
+    return FileResponse("web/index.html")
+
+@app.get("/create-campaign.html", response_class=FileResponse)
+async def serve_create_campaign():
+    """Serve the campaign creation page."""
+    return FileResponse("web/create-campaign.html")
+
+@app.get("/campaigns.html", response_class=FileResponse)
+async def serve_campaigns():
+    """Serve the campaigns list page."""
+    return FileResponse("web/campaigns.html")
+
+@app.get("/campaign-detail.html", response_class=FileResponse)
+async def serve_campaign_detail():
+    """Serve the campaign detail page."""
+    return FileResponse("web/campaign-detail.html")
+
+# ============================================================================
 # API Endpoints
+# ============================================================================
 
 @app.get("/api/v1/health", response_model=HealthResponse)
 async def health_check():

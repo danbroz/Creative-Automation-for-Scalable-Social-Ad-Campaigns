@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Details - Creative Automation Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-primary">✨ Creative Automation</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-700 hover:text-primary font-medium px-3 py-2 rounded-md">Dashboard</a>
+                    <a href="/campaigns.html" class="text-gray-700 hover:text-primary font-medium px-3 py-2 rounded-md">Campaigns</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <a href="/campaigns.html" class="text-primary hover:text-blue-600 mb-4 inline-block">← Back to Campaigns</a>
+            <h1 id="campaign-name" class="text-3xl font-bold text-gray-900">Campaign Details</h1>
+        </div>
+
+        <!-- Campaign Info Card -->
+        <div id="campaign-info" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm text-gray-600">Status</p>
+                    <div id="campaign-status" class="mt-2"></div>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Campaign ID</p>
+                    <p id="campaign-id" class="mt-2 font-mono text-sm"></p>
+                </div>
+            </div>
+            
+            <div id="campaign-details" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Details will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Assets Section -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-2xl font-bold mb-6">Generated Assets</h2>
+            <div id="assets-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="col-span-full text-center text-gray-500 py-8">
+                    Loading assets...
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script>
+        const api = new APIClient();
+        const urlParams = new URLSearchParams(window.location.search);
+        const campaignId = urlParams.get('id');
+
+        async function loadCampaignDetails() {
+            if (!campaignId) {
+                Utils.showToast('No campaign ID provided', 'error');
+                return;
+            }
+
+            try {
+                const campaign = await api.getCampaignStatus(campaignId);
+                
+                // Update page
+                document.getElementById('campaign-name').textContent = 
+                    campaign.brief_path ? campaign.brief_path.split('/').pop().replace('.json', '') : 'Campaign';
+                document.getElementById('campaign-id').textContent = campaign.campaign_id || campaignId;
+                document.getElementById('campaign-status').innerHTML = Utils.getStatusBadge(campaign.status);
+                
+                // Show campaign details
+                document.getElementById('campaign-details').innerHTML = `
+                    <div>
+                        <p class="text-sm text-gray-600">Created</p>
+                        <p class="mt-1 font-medium">${Utils.formatDate(campaign.created_at)}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Started</p>
+                        <p class="mt-1 font-medium">${campaign.started_at ? Utils.formatDate(campaign.started_at) : 'Not started'}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Completed</p>
+                        <p class="mt-1 font-medium">${campaign.completed_at ? Utils.formatDate(campaign.completed_at) : 'Not completed'}</p>
+                    </div>
+                    ${campaign.error ? `
+                        <div class="col-span-full bg-red-50 p-4 rounded">
+                            <p class="text-sm text-red-800"><strong>Error:</strong> ${campaign.error}</p>
+                        </div>
+                    ` : ''}
+                `;
+                
+                // Poll for updates if not completed
+                if (campaign.status !== 'completed' && campaign.status !== 'failed') {
+                    setTimeout(loadCampaignDetails, 3000);
+                }
+                
+            } catch (error) {
+                Utils.showToast('Failed to load campaign details', 'error');
+                console.error(error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadCampaignDetails);
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Campaigns - Creative Automation Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-primary">✨ Creative Automation</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-700 hover:text-primary font-medium px-3 py-2 rounded-md">Dashboard</a>
+                    <a href="/campaigns.html" class="text-primary font-medium px-3 py-2 rounded-md bg-blue-50">Campaigns</a>
+                    <a href="/create-campaign.html" class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 font-medium">+ New Campaign</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">All Campaigns</h1>
+            <p class="mt-2 text-gray-600">Browse and manage your campaigns</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="mb-6 flex gap-4">
+            <select id="filter-status" class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary">
+                <option value="">All Status</option>
+                <option value="completed">Completed</option>
+                <option value="in_progress">In Progress</option>
+                <option value="pending">Pending</option>
+                <option value="failed">Failed</option>
+            </select>
+            <input type="text" id="search-campaigns" placeholder="Search campaigns..." 
+                   class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary">
+        </div>
+
+        <!-- Campaigns List -->
+        <div id="campaigns-list" class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="p-8 text-center text-gray-500">
+                Loading campaigns...
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script>
+        const api = new APIClient();
+        
+        async function loadCampaigns() {
+            try {
+                const stats = await api.getStatistics();
+                // Display campaigns grid
+                // For now, showing message
+                document.getElementById('campaigns-list').innerHTML = `
+                    <div class="p-8 text-center">
+                        <p class="text-gray-600 text-lg">
+                            Total: ${stats.total || 0} campaigns | 
+                            Completed: ${stats.completed || 0} |
+                            In Progress: ${stats.in_progress || 0}
+                        </p>
+                        <p class="text-gray-500 mt-4">
+                            Campaign list feature coming soon. Use the dashboard to view recent campaigns.
+                        </p>
+                    </div>
+                `;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadCampaigns);
+    </script>
+</body>
+</html>
+
