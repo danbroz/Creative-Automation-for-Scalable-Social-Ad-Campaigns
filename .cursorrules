@@ -1,0 +1,224 @@
+# Cursor Rules for AI-Driven Solution Development
+
+## Project Structure
+- Maintain a clear directory structure for the AI solution
+- Keep configuration files separate from implementation code
+- Document all architectural decisions in ARCHITECTURE.md
+
+## Code Organization
+- Separate prompt templates from implementation logic
+- Use consistent naming conventions for all files
+- Implement modular design for easy testing and iteration
+
+## Prompt Development
+- Store all prompt templates in a dedicated /prompts directory
+- Version control all prompt iterations
+- Document prompt parameters and their effects
+- Include examples of expected inputs and outputs
+
+## Testing Requirements
+- Create test cases for all user scenarios
+- Include edge cases and error handling
+- Test prompt injection attempts
+- Validate multi-turn conversation handling
+- Document test results and iterations
+
+## Prompt Engineering
+- Base Prompt Structure Requirements:
+  - Clear role definition
+  - Explicit guidelines
+  - Ethical boundaries
+  - Structured output format
+- Include handling for:
+  - Ambiguous inputs
+  - Prompt injection attempts
+  - Conflicting tone requests
+  - Multi-turn conversations
+- Document all prompt iterations
+- Test against various scenarios:
+  - Clear requests
+  - Ambiguous inputs
+  - Prompt injections
+  - Conflicting tones
+  - Multi-turn conversations
+
+## Security Guidelines
+- Never commit API keys or sensitive credentials
+- Implement proper input sanitization
+- Handle user data according to privacy requirements
+- Document security measures in place
+
+## Documentation
+- Maintain up-to-date README.md
+- Document all architectural decisions
+- Include setup instructions
+- Provide usage examples
+- Document known limitations
+
+## Version Control
+- Use meaningful commit messages
+- Create feature branches for major changes
+- Tag significant prompt iterations
+- Document breaking changes
+
+## Code Quality
+- Follow consistent code formatting
+- Implement proper error handling
+- Add comments for complex logic
+- Use type hints where applicable
+
+## Performance
+- Monitor API response times
+- Implement caching where appropriate
+- Document performance benchmarks
+- Include optimization strategies
+
+## Ethical Guidelines
+- Ensure prompts handle sensitive topics appropriately
+- Implement content filtering
+- Document ethical considerations
+- Include bias mitigation strategies
+
+## Collaboration
+- Document all architectural decisions
+- Maintain clear communication channels
+- Share prompt iterations with team
+- Document feedback and improvements
+
+## Deployment
+- Include deployment instructions
+- Document environment requirements
+- Provide scaling guidelines
+- Include monitoring setup
+
+## Maintenance
+- Regular prompt performance reviews
+- Update documentation as needed
+- Monitor model updates and changes
+- Document maintenance procedures
+
+## Software Development Best Practices
+
+### Core Principles
+- **KISS (Keep It Simple, Stupid)**: Maintain simplicity in design and implementation
+- **DRY (Don't Repeat Yourself)**: Eliminate code duplication through abstraction
+- **YAGNI (You Aren't Gonna Need It)**: Avoid implementing features until they're necessary
+- **SOLID Principles**: Follow object-oriented design principles
+  - Single Responsibility: Each class should have one responsibility
+  - Open/Closed: Open for extension, closed for modification
+  - Liskov Substitution: Subtypes must be substitutable for base types
+  - Interface Segregation: Prefer specific interfaces over general ones
+  - Dependency Inversion: Depend on abstractions, not concretions
+
+### Code Quality
+- Write readable, self-documenting code with meaningful names
+- Follow consistent code formatting and style guidelines
+- Add comments for complex logic, but prefer self-documenting code
+- Use type hints and static typing where applicable
+- Implement proper error handling and edge cases
+- Regular refactoring to improve code structure
+- Handle errors gracefully with appropriate logging
+
+### Development Process
+- Test Early and Often
+  - Implement unit, integration, and end-to-end tests
+  - Practice Test-Driven Development (TDD) where appropriate
+  - Automate testing in CI/CD pipelines
+- Version Control Everything
+  - Use meaningful commit messages
+  - Create feature branches for major changes
+  - Document breaking changes
+- Automate Repetitive Tasks
+  - Use scripts for building, testing, and deployment
+  - Implement CI/CD pipelines
+- Regular Code Reviews
+  - Peer review for quality and knowledge sharing
+  - Document feedback and improvements
+
+### Security and Performance
+- Security First
+  - Sanitize all inputs
+  - Manage secrets securely
+  - Follow security best practices
+- Performance Awareness
+  - Profile and optimize code where necessary
+  - Avoid premature optimization
+  - Monitor API response times
+  - Implement caching where appropriate
+
+### Documentation and Maintenance
+- Document Architecture and Decisions
+  - Keep up-to-date README.md
+  - Maintain architectural decision records
+  - Document setup instructions
+  - Provide usage examples
+- Regular Maintenance
+  - Review and update documentation
+  - Monitor dependencies and updates
+  - Respect licensing and compliance
+  - Regular performance reviews
+
+### Collaboration
+- Maintain clear communication channels
+- Share knowledge and best practices
+- Document feedback and improvements
+- Follow consistent development workflows
+
+## AI System Architecture
+- Implement agentic system with memory capabilities
+- Core Components Required:
+  - Main Agent (GPT-4.1 or equivalent)
+  - Memory System for conversation history
+  - Input Validator
+  - Output Formatter
+  - Safety Filter
+- Design for flexibility and scalability
+- Maintain context across conversations
+- Handle edge cases gracefully
+
+## Safety & Ethics
+- Implement comprehensive content filtering
+- Define clear content boundaries
+- Handle sensitive topics appropriately
+- Ensure user privacy:
+  - No personal data collection
+  - Clear data handling policies
+  - Transparent about system limitations
+- Document all safety measures
+- Regular safety audits
+
+## Success Metrics
+- Track and document:
+  - Response relevance
+  - Creativity level
+  - Consistency with user requests
+  - System robustness
+  - Edge case handling
+  - Error recovery
+  - Performance under load
+
+## Alternative Models
+- Document alternative model options:
+  - Claude (Anthropic)
+  - Gemini (Google)
+  - LLaMA (llmapi.com)
+- Include strengths and use cases
+- Maintain fallback strategies
+- Document integration requirements
+
+## System Monitoring
+- Track API response times
+- Monitor conversation quality
+- Log error rates
+- Document performance metrics
+- Regular system health checks
+
+## Documentation Requirements
+- Maintain up-to-date:
+  - Architecture decisions
+  - Model configurations
+  - Prompt iterations
+  - Safety measures
+  - Performance metrics
+  - Known limitations
+  - Future improvements 

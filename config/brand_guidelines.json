@@ -1,0 +1,35 @@
+{
+  "brand_name": "GlobalGoods",
+  "brand_colors": {
+    "primary": "#FF6B35",
+    "secondary": "#004E89",
+    "accent": "#F7B801",
+    "background": "#FFFFFF",
+    "text": "#2D3142"
+  },
+  "fonts": {
+    "heading": "Arial Bold",
+    "body": "Arial",
+    "size_heading": 72,
+    "size_body": 36
+  },
+  "logo": {
+    "filename": "brand_logo.png",
+    "required": true,
+    "min_size_percent": 5
+  },
+  "text_overlay": {
+    "position": "bottom",
+    "padding": 40,
+    "max_width_percent": 80,
+    "shadow": true,
+    "shadow_color": "#000000",
+    "shadow_offset": 3
+  },
+  "compliance_rules": {
+    "require_logo": true,
+    "require_brand_colors": true,
+    "min_contrast_ratio": 4.5
+  }
+}
+

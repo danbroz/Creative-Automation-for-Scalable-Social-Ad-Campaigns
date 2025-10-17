@@ -1,0 +1,17 @@
+{
+  "campaign_name": "holiday_gift_guide",
+  "products": [
+    {
+      "name": "Artisan Coffee Set",
+      "description": "Curated collection of single-origin coffee beans with premium French press"
+    },
+    {
+      "name": "Luxury Candle Collection",
+      "description": "Hand-poured soy candles with essential oils in elegant glass containers"
+    }
+  ],
+  "target_region": "Global",
+  "target_audience": "Gift shoppers looking for thoughtful, high-quality presents for loved ones",
+  "campaign_message": "Give the gift of thoughtful luxury this holiday season"
+}
+

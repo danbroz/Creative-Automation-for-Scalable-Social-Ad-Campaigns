@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "templates": {
+    "product_hero": "Professional product photography of {product_name}, {product_description}, studio lighting, high quality, commercial photography, clean background, sharp focus, 8k resolution",
+    "lifestyle": "Lifestyle photography featuring {product_name}, {context}, natural lighting, authentic, engaging, {target_audience} using the product, professional photography",
+    "abstract": "Abstract artistic representation of {product_name}, modern, clean, professional, {brand_colors}, minimalist design, suitable for advertising",
+    "seasonal": "Seasonal {season} themed image featuring {product_name}, {seasonal_elements}, professional photography, vibrant, appealing to {target_audience}"
+  },
+  "style_modifiers": {
+    "modern": "modern, sleek, contemporary",
+    "luxury": "luxurious, premium, high-end",
+    "eco_friendly": "sustainable, natural, eco-friendly",
+    "tech": "futuristic, innovative, cutting-edge",
+    "family": "warm, inviting, family-friendly"
+  },
+  "quality_modifiers": [
+    "professional photography",
+    "high resolution",
+    "studio quality",
+    "commercial grade",
+    "8k detailed"
+  ]
+}
+

@@ -1,0 +1,21 @@
+{
+  "campaign_name": "tech_accessories_fall",
+  "products": [
+    {
+      "name": "Wireless Charging Pad",
+      "description": "Fast wireless charging pad with LED indicator, compatible with all Qi-enabled devices"
+    },
+    {
+      "name": "Bluetooth Speaker",
+      "description": "Portable waterproof Bluetooth speaker with 360-degree sound and 12-hour battery"
+    },
+    {
+      "name": "Smart Watch Band",
+      "description": "Premium silicone watch band with quick-release mechanism, available in multiple colors"
+    }
+  ],
+  "target_region": "Europe",
+  "target_audience": "Tech enthusiasts and professionals aged 22-45 who value innovation and quality",
+  "campaign_message": "Elevate your tech experience with premium accessories designed for modern life"
+}
+

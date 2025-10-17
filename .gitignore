@@ -1,0 +1,64 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Logs
+logs/*.log
+logs/*.txt
+
+# Output
+output/*/
+
+# Temporary files
+*.tmp
+.DS_Store
+
+# Generated images (except examples)
+assets/products/*.png
+assets/products/*.jpg
+!assets/products/.gitkeep
+
+# Demo recordings
+demo/*.mp4
+demo/*.webm
+

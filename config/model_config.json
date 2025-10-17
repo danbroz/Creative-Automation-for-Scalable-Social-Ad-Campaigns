@@ -1,0 +1,31 @@
+{
+  "primary_model": "dall-e-3",
+  "model_settings": {
+    "dall-e-3": {
+      "size": "1024x1024",
+      "quality": "standard",
+      "n": 1,
+      "timeout": 60,
+      "max_retries": 3,
+      "retry_delay": 2
+    }
+  },
+  "alternative_models": [
+    {
+      "name": "dall-e-2",
+      "description": "Lower cost, good quality",
+      "size": "1024x1024"
+    },
+    {
+      "name": "stability-ai",
+      "description": "Cost-effective alternative",
+      "note": "Requires separate API integration"
+    }
+  ],
+  "pricing": {
+    "dall-e-3_standard_1024": 0.040,
+    "dall-e-3_hd_1024": 0.080,
+    "dall-e-2_1024": 0.020
+  }
+}
+

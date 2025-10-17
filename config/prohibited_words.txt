@@ -1,0 +1,33 @@
+# Legal Content Filter - Prohibited Words
+# These words will be flagged in campaign messages
+
+# Misleading claims
+guaranteed
+miracle
+cure
+instant
+
+# Regulatory concerns
+FDA approved
+clinically proven
+medical grade
+
+# Superlatives without proof
+best
+#1
+fastest
+cheapest
+
+# Discriminatory language
+(Add specific terms based on legal requirements)
+
+# Financial claims
+get rich quick
+guaranteed returns
+risk-free investment
+
+# Health claims (without substantiation)
+lose weight instantly
+anti-aging miracle
+prevents disease
+

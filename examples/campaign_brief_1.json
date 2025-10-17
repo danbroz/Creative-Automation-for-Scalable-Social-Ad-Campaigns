@@ -1,0 +1,17 @@
+{
+  "campaign_name": "summer_wellness_2025",
+  "products": [
+    {
+      "name": "Organic Green Tea",
+      "description": "Premium loose leaf green tea from sustainable farms, rich in antioxidants"
+    },
+    {
+      "name": "Herbal Sleep Blend",
+      "description": "Natural herbal tea blend with chamomile and lavender for relaxation"
+    }
+  ],
+  "target_region": "North America",
+  "target_audience": "Health-conscious millennials aged 25-40 interested in wellness and sustainability",
+  "campaign_message": "Discover natural wellness with our premium organic tea collection"
+}
+
