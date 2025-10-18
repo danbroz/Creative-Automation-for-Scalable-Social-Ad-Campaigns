@@ -66,6 +66,9 @@ app.add_middleware(
 # Mount static files (must be done after middleware but before routes)
 app.mount("/static", StaticFiles(directory="web/static"), name="static")
 
+# Mount output directory for viewing generated assets
+app.mount("/output", StaticFiles(directory="output", html=True), name="output")
+
 # Global campaign queue
 campaign_queue = CampaignQueue()
 
