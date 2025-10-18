@@ -212,13 +212,8 @@ class Dashboard {
             });
         }
         
-        // View all campaigns button
-        const viewAllBtn = document.getElementById('btn-view-all');
-        if (viewAllBtn) {
-            viewAllBtn.addEventListener('click', () => {
-                window.location.href = 'campaigns.html';
-            });
-        }
+        // View all campaigns button - removed since campaigns page is no longer needed
+        // All campaign information is now available on the dashboard
         
         // Analytics button
         const analyticsBtn = document.getElementById('btn-analytics');
