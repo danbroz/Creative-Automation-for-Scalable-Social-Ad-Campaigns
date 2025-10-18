@@ -30,7 +30,7 @@ This pipeline automates the creation of social media ad campaign assets by:
 - ✅ **Windows** (10, 11, Server 2019+)
 - ✅ **Docker** (Recommended - identical on all platforms)
 
-See [CROSS_PLATFORM_GUIDE.md](CROSS_PLATFORM_GUIDE.md) for platform-specific instructions.
+See [CROSS_PLATFORM_GUIDE.md](CROSS_PLATFORM_GUIDE.md) for platform-specific instructions and [DOCKER_GUIDE.md](DOCKER_GUIDE.md) for comprehensive Docker container usage.
 
 ## 📋 Requirements
 
@@ -41,7 +41,29 @@ See [CROSS_PLATFORM_GUIDE.md](CROSS_PLATFORM_GUIDE.md) for platform-specific ins
 
 ## 🚀 Quick Start
 
-### 1. Installation
+### 🐳 Docker Method (Recommended - Works on All Platforms)
+
+**Prerequisites:** Install [Docker Desktop](https://www.docker.com/products/docker-desktop) for your platform.
+
+```bash
+# Clone the repository
+git clone https://github.com/danbroz/Creatve-Automation-for-Scalable-Social-Ad-Campaigns.git
+cd Creatve-Automation-for-Scalable-Social-Ad-Campaigns
+
+# Set up environment
+cp .env.example .env
+# Edit .env file and add your OpenAI API key
+
+# Start the application
+docker-compose up --build
+
+# Access the web interface
+# Open browser to: http://localhost:8000
+```
+
+**That's it!** The Docker method works identically on Ubuntu, macOS, and Windows.
+
+### 🐍 Native Python Method
 
 #### Linux & macOS
 
@@ -56,6 +78,16 @@ source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# For development (includes testing tools)
+pip install -r requirements-dev.txt
+
+# Set up environment
+cp .env.example .env
+# Edit .env file and add your OpenAI API key
+
+# Run example campaign
+./run.sh examples/campaign_brief_1.json --verbose
 ```
 
 #### Windows (Command Prompt)
@@ -71,6 +103,13 @@ venv\Scripts\activate.bat
 
 REM Install dependencies
 pip install -r requirements.txt
+
+REM Set up environment
+copy .env.example .env
+REM Edit .env file and add your OpenAI API key
+
+REM Run example campaign
+run.bat examples\campaign_brief_1.json --verbose
 ```
 
 #### Windows (PowerShell)
@@ -86,85 +125,32 @@ python -m venv venv
 
 # Install dependencies
 pip install -r requirements.txt
-```
 
-```bash
-# For development (includes testing tools)
-pip install -r requirements-dev.txt
-```
+# Set up environment
+Copy-Item .env.example .env
+# Edit .env file and add your OpenAI API key
 
-### 2. Database Setup (Automatic with SQLite)
-
-For enterprise features (A/B testing, analytics, multi-tenant), initialize the database:
-
-```bash
-# Initialize SQLite database (creates creative_automation.db)
-python -c "from src.database import init_database; init_database()"
-```
-
-**SQLite Benefits:**
-- ✅ No database server required
-- ✅ Zero configuration
-- ✅ Single file (easy backup)
-- ✅ Perfect for development and production
-
-See [DATABASE_SETUP_SQLITE.md](DATABASE_SETUP_SQLITE.md) for detailed instructions.
-
-### 3. Configuration
-
-**Linux & macOS:**
-```bash
-# Copy the example environment file
-cp .env.example .env
-
-# Edit .env and add your OpenAI API key
-# OPENAI_API_KEY=your_key_here
-# DATABASE_URL=sqlite:///./creative_automation.db  # (optional, this is the default)
-```
-
-**Windows:**
-```cmd
-REM Copy the example environment file
-copy .env.example .env
-
-REM Edit .env and add your OpenAI API key
-REM OPENAI_API_KEY=your_key_here
-REM DATABASE_URL=sqlite:///./creative_automation.db  (optional, this is the default)
-```
-
-### 4. Run Your First Campaign
-
-#### Using Docker (All Platforms - Recommended)
-
-```bash
-# Start the application
-docker-compose up --build
-
-# Access web interface at http://localhost:8000
-# Create campaigns through the beautiful UI!
-```
-
-#### Using Convenience Scripts
-
-**Linux & macOS:**
-```bash
-# Run example campaign
-./run.sh examples/campaign_brief_1.json
-
-# With verbose output
-./run.sh examples/campaign_brief_1.json --verbose
-```
-
-**Windows (Command Prompt):**
-```cmd
-REM Run example campaign
-run.bat examples\campaign_brief_1.json --verbose
-```
-
-**Windows (PowerShell):**
-```powershell
 # Run example campaign
 .\run.ps1 examples\campaign_brief_1.json --verbose
+```
+
+### Configuration
+
+Edit the `.env` file and add your OpenAI API key:
+```env
+OPENAI_API_KEY=your-api-key-here
+```
+
+### Web Interface
+
+The web interface is automatically available when using Docker:
+- **Web Interface**: http://localhost:8000
+- **API Documentation**: http://localhost:8000/docs
+- **Health Check**: http://localhost:8000/api/v1/health
+
+For native Python installation, start the web interface with:
+```bash
+python -m src.api.app
 ```
 
 #### Using Python Directly (All Platforms)
