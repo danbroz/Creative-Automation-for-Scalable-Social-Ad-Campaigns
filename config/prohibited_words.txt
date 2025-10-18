@@ -6,28 +6,68 @@ guaranteed
 miracle
 cure
 instant
+illegal
+better than
+superior to
+outperforms
 
 # Regulatory concerns
 FDA approved
 clinically proven
 medical grade
+approved by
+certified by
 
 # Superlatives without proof
 best
 #1
 fastest
 cheapest
+number one
+top rated
+award winning
+
+# Trademark/copyright issues
+mcdonald's
+golden arches
+coca cola
+pepsi
+nike
+adidas
+apple
+google
+facebook
+amazon
+
+# Comparative claims
+better than
+superior to
+outperforms
+beats
+vs
+versus
+compared to
 
 # Discriminatory language
-(Add specific terms based on legal requirements)
+illegal
+criminal
+fraud
+scam
+fake
+counterfeit
 
 # Financial claims
 get rich quick
 guaranteed returns
 risk-free investment
+make money fast
+earn cash
 
 # Health claims (without substantiation)
 lose weight instantly
 anti-aging miracle
 prevents disease
+cures
+heals
+treats
 

@@ -3,7 +3,7 @@
   "model_settings": {
     "dall-e-3": {
       "size": "1024x1024",
-      "quality": "standard",
+      "quality": "hd",
       "n": 1,
       "timeout": 60,
       "max_retries": 3,

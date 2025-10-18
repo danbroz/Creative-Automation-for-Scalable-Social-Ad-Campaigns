@@ -87,7 +87,7 @@ class ContentFilter:
         Returns:
             List of suggested alternatives
         """
-        # Basic suggestion mapping
+        # Enhanced suggestion mapping
         suggestions_map = {
             'guaranteed': ['reliable', 'trusted', 'proven'],
             'miracle': ['effective', 'innovative', 'advanced'],
@@ -95,7 +95,28 @@ class ContentFilter:
             'best': ['leading', 'premium', 'top-rated'],
             '#1': ['leading', 'top-rated', 'award-winning'],
             'fastest': ['quick', 'efficient', 'streamlined'],
-            'cheapest': ['affordable', 'economical', 'value-priced']
+            'cheapest': ['affordable', 'economical', 'value-priced'],
+            'illegal': ['unique', 'special', 'exclusive'],
+            'better than': ['quality', 'premium', 'superior quality'],
+            'superior to': ['quality', 'premium', 'excellent'],
+            'outperforms': ['delivers', 'provides', 'offers'],
+            'mcdonald\'s': ['[competitor name]', 'major chains', 'fast food'],
+            'golden arches': ['[competitor symbol]', 'major brands', 'well-known chains'],
+            'coca cola': ['[competitor name]', 'major brands', 'leading companies'],
+            'pepsi': ['[competitor name]', 'major brands', 'leading companies'],
+            'nike': ['[competitor name]', 'major brands', 'leading companies'],
+            'adidas': ['[competitor name]', 'major brands', 'leading companies'],
+            'apple': ['[competitor name]', 'major brands', 'leading companies'],
+            'google': ['[competitor name]', 'major brands', 'leading companies'],
+            'facebook': ['[competitor name]', 'major brands', 'leading companies'],
+            'amazon': ['[competitor name]', 'major brands', 'leading companies'],
+            'vs': ['compared to', 'alongside', 'with'],
+            'versus': ['compared to', 'alongside', 'with'],
+            'compared to': ['alongside', 'with', 'and'],
+            'beats': ['delivers', 'provides', 'offers'],
+            'number one': ['leading', 'top-rated', 'premium'],
+            'top rated': ['highly rated', 'well-reviewed', 'popular'],
+            'award winning': ['recognized', 'acclaimed', 'celebrated']
         }
         
         return suggestions_map.get(word.lower(), ['alternative wording'])
