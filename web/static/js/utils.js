@@ -28,6 +28,10 @@ class Utils {
         
         const d = new Date(date);
         const now = new Date();
+        
+        // Handle invalid dates
+        if (isNaN(d.getTime())) return 'Invalid date';
+        
         const diffMs = now - d;
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
@@ -43,7 +47,9 @@ class Utils {
         return d.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
         });
     }
 
