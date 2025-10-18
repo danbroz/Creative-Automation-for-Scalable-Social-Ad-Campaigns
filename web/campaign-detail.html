@@ -190,7 +190,12 @@
                     </div>
                     ${campaign.error ? `
                         <div class="col-span-full bg-red-50 p-4 rounded border border-red-200">
-                            <p class="text-sm text-red-800"><strong>❌ Error:</strong> ${campaign.error}</p>
+                            <div class="text-sm text-red-800">
+                                <strong>❌ Error:</strong>
+                                <div class="mt-2 whitespace-pre-line font-mono text-xs bg-red-100 p-3 rounded border">
+                                    ${campaign.error}
+                                </div>
+                            </div>
                         </div>
                     ` : ''}
                 `;
