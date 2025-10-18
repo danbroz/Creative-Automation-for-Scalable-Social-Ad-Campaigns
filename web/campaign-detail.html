@@ -141,7 +141,7 @@
                 
                 // Update page
                 document.getElementById('campaign-name').textContent = 
-                    campaign.brief_path ? campaign.brief_path.split('/').pop().replace('.json', '') : 'Campaign';
+                    campaign.campaign_name || (campaign.brief_path ? campaign.brief_path.split('/').pop().replace('.json', '') : 'Campaign');
                 document.getElementById('campaign-id').textContent = campaign.campaign_id || campaignId;
                 document.getElementById('campaign-status').innerHTML = Utils.getStatusBadge(campaign.status);
                 
@@ -215,7 +215,7 @@
                     `;
                 } else if (campaign.status === 'completed') {
                     // Extract campaign name from brief path
-                    const briefFileName = campaign.brief_path ? campaign.brief_path.split('/').pop().replace('.json', '') : 'campaign';
+                    const briefFileName = campaign.campaign_name || (campaign.brief_path ? campaign.brief_path.split('/').pop().replace('.json', '') : 'campaign');
                     const outputPath = `/output/`;
                     
                     assetsGrid.innerHTML = `

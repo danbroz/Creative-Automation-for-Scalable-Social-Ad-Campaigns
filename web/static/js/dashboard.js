@@ -176,7 +176,7 @@ class Dashboard {
             <tr class="hover:bg-gray-50 transition-colors cursor-pointer" 
                 onclick="window.location.href='campaign-detail.html?id=${campaign.job_id}'">
                 <td class="px-6 py-4">
-                    <div class="font-medium text-gray-900">${Utils.sanitizeHTML(campaign.brief_path.split('/').pop().replace('.json', ''))}</div>
+                    <div class="font-medium text-gray-900">${Utils.sanitizeHTML(campaign.campaign_name || campaign.brief_path.split('/').pop().replace('.json', ''))}</div>
                     <div class="text-sm text-gray-500">${Utils.formatDate(campaign.created_at)}</div>
                 </td>
                 <td class="px-6 py-4">
