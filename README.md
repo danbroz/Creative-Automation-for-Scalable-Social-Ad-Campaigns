@@ -21,15 +21,29 @@ This pipeline automates the creation of social media ad campaign assets by:
 - **Performance Monitoring**: Tracks API costs, response times, and success rates
 - **Comprehensive Reporting**: JSON and human-readable execution summaries
 
+## 💻 Platform Support
+
+**Works on all major operating systems:**
+
+- ✅ **Linux** (Ubuntu, Debian, Fedora, etc.)
+- ✅ **macOS** (Big Sur 11.0+, Monterey, Ventura, Sonoma, Sequoia)
+- ✅ **Windows** (10, 11, Server 2019+)
+- ✅ **Docker** (Recommended - identical on all platforms)
+
+See [CROSS_PLATFORM_GUIDE.md](CROSS_PLATFORM_GUIDE.md) for platform-specific instructions.
+
 ## 📋 Requirements
 
 - Python 3.9 or higher
 - OpenAI API key (DALL-E 3 access)
 - 2GB+ free disk space
+- Docker (optional but recommended)
 
 ## 🚀 Quick Start
 
 ### 1. Installation
+
+#### Linux & macOS
 
 ```bash
 # Clone the repository
@@ -37,8 +51,38 @@ git clone https://github.com/danbroz/Creatve-Automation-for-Scalable-Social-Ad-C
 cd Creatve-Automation-for-Scalable-Social-Ad-Campaigns
 
 # Create virtual environment
+python3 -m venv venv  # Use python3 on macOS
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+#### Windows (Command Prompt)
+
+```cmd
+REM Clone the repository
+git clone https://github.com/danbroz/Creatve-Automation-for-Scalable-Social-Ad-Campaigns.git
+cd Creatve-Automation-for-Scalable-Social-Ad-Campaigns
+
+REM Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+venv\Scripts\activate.bat
+
+REM Install dependencies
+pip install -r requirements.txt
+```
+
+#### Windows (PowerShell)
+
+```powershell
+# Clone the repository
+git clone https://github.com/danbroz/Creatve-Automation-for-Scalable-Social-Ad-Campaigns.git
+cd Creatve-Automation-for-Scalable-Social-Ad-Campaigns
+
+# Create virtual environment
+python -m venv venv
+.\venv\Scripts\Activate.ps1
 
 # Install dependencies
 pip install -r requirements.txt
@@ -68,6 +112,7 @@ See [DATABASE_SETUP_SQLITE.md](DATABASE_SETUP_SQLITE.md) for detailed instructio
 
 ### 3. Configuration
 
+**Linux & macOS:**
 ```bash
 # Copy the example environment file
 cp .env.example .env
@@ -77,14 +122,57 @@ cp .env.example .env
 # DATABASE_URL=sqlite:///./creative_automation.db  # (optional, this is the default)
 ```
 
+**Windows:**
+```cmd
+REM Copy the example environment file
+copy .env.example .env
+
+REM Edit .env and add your OpenAI API key
+REM OPENAI_API_KEY=your_key_here
+REM DATABASE_URL=sqlite:///./creative_automation.db  (optional, this is the default)
+```
+
 ### 4. Run Your First Campaign
+
+#### Using Docker (All Platforms - Recommended)
+
+```bash
+# Start the application
+docker-compose up --build
+
+# Access web interface at http://localhost:8000
+# Create campaigns through the beautiful UI!
+```
+
+#### Using Convenience Scripts
+
+**Linux & macOS:**
+```bash
+# Run example campaign
+./run.sh examples/campaign_brief_1.json
+
+# With verbose output
+./run.sh examples/campaign_brief_1.json --verbose
+```
+
+**Windows (Command Prompt):**
+```cmd
+REM Run example campaign
+run.bat examples\campaign_brief_1.json --verbose
+```
+
+**Windows (PowerShell):**
+```powershell
+# Run example campaign
+.\run.ps1 examples\campaign_brief_1.json --verbose
+```
+
+#### Using Python Directly (All Platforms)
 
 ```bash
 # Run example campaign
 python -m src.main examples/campaign_brief_1.json
-```
 
-```bash
 # With verbose output
 python -m src.main examples/campaign_brief_1.json --verbose
 ```
