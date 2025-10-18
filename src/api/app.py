@@ -278,29 +278,93 @@ async def get_campaign_status(campaign_id: str):
     Get campaign processing status.
     
     Args:
-        campaign_id: Campaign ID from creation response
+        campaign_id: Campaign ID from creation response or filesystem campaign ID
     
     Returns:
         Dict: Campaign status and details
     
     Example:
         GET /api/v1/campaigns/12345-67890
+        GET /api/v1/campaigns/fs_summer_wellness_2025
     """
+    # First, check in-memory queue
     job = campaign_queue.get_job(campaign_id)
     
-    if not job:
-        raise HTTPException(status_code=404, detail="Campaign not found")
+    if job:
+        return {
+            "campaign_id": job.job_id,
+            "status": job.status.value,
+            "brief_path": job.brief_path,
+            "created_at": job.created_at.isoformat(),
+            "started_at": job.started_at.isoformat() if job.started_at else None,
+            "completed_at": job.completed_at.isoformat() if job.completed_at else None,
+            "error": job.error_message,
+            "result": job.result
+        }
     
-    return {
-        "campaign_id": job.job_id,
-        "status": job.status.value,
-        "brief_path": job.brief_path,
-        "created_at": job.created_at.isoformat(),
-        "started_at": job.started_at.isoformat() if job.started_at else None,
-        "completed_at": job.completed_at.isoformat() if job.completed_at else None,
-        "error": job.error_message,
-        "result": job.result
-    }
+    # If not in queue, check filesystem for completed campaigns
+    from pathlib import Path as PathLib
+    import os
+    import json
+    
+    # Handle filesystem campaign IDs (e.g., fs_summer_wellness_2025)
+    if campaign_id.startswith('fs_'):
+        folder_name = campaign_id[3:]  # Remove 'fs_' prefix
+    else:
+        folder_name = campaign_id
+    
+    output_dir = PathLib("output") / folder_name
+    
+    if output_dir.exists() and output_dir.is_dir():
+        summary_file = output_dir / "campaign_summary.json"
+        execution_file = output_dir / "execution_report.json"
+        
+        if summary_file.exists() or execution_file.exists():
+            campaign_data = {
+                'campaign_id': campaign_id,
+                'status': 'completed',
+                'brief_path': f'output/{folder_name}/campaign_summary.json',
+                'created_at': datetime.fromtimestamp(output_dir.stat().st_ctime).isoformat(),
+                'started_at': datetime.fromtimestamp(output_dir.stat().st_ctime).isoformat(),
+                'completed_at': datetime.fromtimestamp(output_dir.stat().st_mtime).isoformat(),
+                'error': None,
+                'result': None,
+                'campaign_name': folder_name
+            }
+            
+            # Try to read execution report for accurate timestamps
+            try:
+                if execution_file.exists():
+                    with open(execution_file, 'r') as f:
+                        execution = json.load(f)
+                        exec_summary = execution.get('execution_summary', {})
+                        if exec_summary.get('start_time'):
+                            campaign_data['started_at'] = exec_summary['start_time']
+                        if exec_summary.get('end_time'):
+                            campaign_data['completed_at'] = exec_summary['end_time']
+                        if exec_summary.get('start_time'):
+                            campaign_data['created_at'] = exec_summary['start_time']
+                        if exec_summary.get('status') == 'failed':
+                            campaign_data['status'] = 'failed'
+                            campaign_data['error'] = exec_summary.get('error', 'Unknown error')
+            except Exception as e:
+                pass
+            
+            # Try to read summary for campaign name
+            try:
+                if summary_file.exists():
+                    with open(summary_file, 'r') as f:
+                        summary = json.load(f)
+                        campaign_data['campaign_name'] = summary.get('campaign_name', folder_name)
+                        if summary.get('generated_at') and not execution_file.exists():
+                            campaign_data['completed_at'] = summary['generated_at']
+            except Exception as e:
+                pass
+            
+            return campaign_data
+    
+    # Campaign not found in queue or filesystem
+    raise HTTPException(status_code=404, detail="Campaign not found")
 
 @app.get("/api/v1/campaigns/{campaign_id}/assets", dependencies=[Depends(verify_api_key)])
 async def list_campaign_assets(campaign_id: str):
@@ -308,35 +372,64 @@ async def list_campaign_assets(campaign_id: str):
     List all generated assets for a campaign.
     
     Args:
-        campaign_id: Campaign ID
+        campaign_id: Campaign ID or filesystem campaign ID
     
     Returns:
         Dict: List of asset URLs/paths
     """
+    from pathlib import Path as PathLib
+    
+    # First, check in-memory queue
     job = campaign_queue.get_job(campaign_id)
     
-    if not job:
-        raise HTTPException(status_code=404, detail="Campaign not found")
-    
-    if job.status != CampaignStatus.COMPLETED:
-        return {
-            "campaign_id": campaign_id,
-            "status": job.status.value,
-            "assets": [],
-            "message": "Campaign not yet completed"
-        }
+    if job:
+        if job.status != CampaignStatus.COMPLETED:
+            return {
+                "campaign_id": campaign_id,
+                "status": job.status.value,
+                "assets": [],
+                "message": "Campaign not yet completed"
+            }
+        
+        # Campaign completed in queue, find assets
+        # Extract campaign name from brief path or use job_id
+        campaign_name = job.job_id
+    else:
+        # Check filesystem for completed campaigns
+        if campaign_id.startswith('fs_'):
+            campaign_name = campaign_id[3:]  # Remove 'fs_' prefix
+        else:
+            campaign_name = campaign_id
     
     # Find assets in output directory
-    # This is a simplified implementation
-    output_dir = Path("output")
+    output_dir = PathLib("output") / campaign_name
     assets = []
     
-    # TODO: Implement proper asset discovery based on campaign name
+    if output_dir.exists() and output_dir.is_dir():
+        # Scan for image files
+        for file in output_dir.rglob("*"):
+            if file.is_file() and file.suffix.lower() in ['.png', '.jpg', '.jpeg', '.webp']:
+                # Create relative path for URL
+                relative_path = file.relative_to(PathLib("output"))
+                asset_url = f"/api/v1/browse/output/{relative_path}"
+                
+                assets.append({
+                    "filename": file.name,
+                    "path": str(relative_path),
+                    "url": asset_url,
+                    "size": file.stat().st_size,
+                    "modified": datetime.fromtimestamp(file.stat().st_mtime).isoformat()
+                })
+    
+    if not output_dir.exists():
+        raise HTTPException(status_code=404, detail="Campaign assets not found")
     
     return {
         "campaign_id": campaign_id,
         "status": "completed",
-        "assets": assets
+        "assets": assets,
+        "total_assets": len(assets),
+        "output_path": f"/api/v1/browse/output/{campaign_name}"
     }
 
 @app.get("/api/v1/stats", dependencies=[Depends(verify_api_key)])
