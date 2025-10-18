@@ -124,8 +124,8 @@ class InputValidator:
         if not isinstance(products, list):
             raise ValueError("Products must be a list")
         
-        if len(products) < 2:
-            raise ValueError("At least 2 products required")
+        if len(products) < 1:
+            raise ValueError("At least 1 product required")
         
         validated_products = []
         for idx, product in enumerate(products):
