@@ -555,7 +555,7 @@ Tested and working on:
 ## 🆘 Getting Help
 
 1. Check [CROSS_PLATFORM_GUIDE.md](CROSS_PLATFORM_GUIDE.md)
-2. Review [README.md](README.md)
+2. Review [README.md](../README.md)
 3. Open issue on GitHub
 4. Include macOS version and error logs
 

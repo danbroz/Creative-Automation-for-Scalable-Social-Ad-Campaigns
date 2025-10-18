@@ -740,5 +740,5 @@ This application has been tested on:
 
 ---
 
-**Need help?** Check the main [README.md](README.md) or open an issue on GitHub.
+**Need help?** Check the main [README.md](../README.md) or open an issue on GitHub.
 

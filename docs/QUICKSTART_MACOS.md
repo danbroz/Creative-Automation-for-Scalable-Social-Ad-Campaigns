@@ -108,7 +108,7 @@ deactivate  # Exit virtual environment
 
 - 📖 Full macOS Guide: [MACOS_GUIDE.md](MACOS_GUIDE.md)
 - 🌐 Cross-Platform: [CROSS_PLATFORM_GUIDE.md](CROSS_PLATFORM_GUIDE.md)
-- 📘 Main README: [README.md](README.md)
+- 📘 Main README: [README.md](../README.md)
 
 ---
 

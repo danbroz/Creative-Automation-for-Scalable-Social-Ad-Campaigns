@@ -30,7 +30,7 @@ This pipeline automates the creation of social media ad campaign assets by:
 - ✅ **Windows** (10, 11, Server 2019+)
 - ✅ **Docker** (Recommended - identical on all platforms)
 
-See [CROSS_PLATFORM_GUIDE.md](CROSS_PLATFORM_GUIDE.md) for platform-specific instructions and [DOCKER_GUIDE.md](DOCKER_GUIDE.md) for comprehensive Docker container usage.
+See [CROSS_PLATFORM_GUIDE.md](docs/CROSS_PLATFORM_GUIDE.md) for platform-specific instructions and [DOCKER_GUIDE.md](docs/DOCKER_GUIDE.md) for comprehensive Docker container usage.
 
 ## 📋 Requirements
 
@@ -364,7 +364,7 @@ The pipeline tracks:
 
 ## 🏗️ Architecture
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed system design, component interactions, and SOLID principle applications.
+See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed system design, component interactions, and SOLID principle applications.
 
 **Key Components:**
 1. **Input Validator** - Sanitizes inputs
@@ -472,7 +472,7 @@ All advanced enterprise features have complete foundations:
 - Database (SQLite, SQLAlchemy, Alembic)
 
 ### 📝 Implementation Guide
-See [ENTERPRISE_FEATURES_IMPLEMENTATION.md](ENTERPRISE_FEATURES_IMPLEMENTATION.md) for:
+See [ENTERPRISE_FEATURES_IMPLEMENTATION.md](docs/ENTERPRISE_FEATURES_IMPLEMENTATION.md) for:
 - Complete implementation templates for all features
 - Code examples with comprehensive comments
 - API endpoint specifications
@@ -493,7 +493,7 @@ See [ENTERPRISE_FEATURES_IMPLEMENTATION.md](ENTERPRISE_FEATURES_IMPLEMENTATION.m
 
 - [OpenAI DALL-E API Documentation](https://platform.openai.com/docs/guides/images)
 - [Prompt Engineering Guide](prompts/prompt_templates.md)
-- [Architecture Documentation](ARCHITECTURE.md)
+- [Architecture Documentation](docs/ARCHITECTURE.md)
 
 ## 🤝 Contributing
 

@@ -210,7 +210,7 @@ Total Cost: $0.0800 USD
 
 ## Next Steps
 
-1. **Read the full documentation**: See [README.md](README.md)
+1. **Read the full documentation**: See [README.md](../README.md)
 2. **Understand the architecture**: Check [ARCHITECTURE.md](ARCHITECTURE.md)
 3. **Create your campaigns**: Start generating assets!
 4. **Record your demo**: Prepare for the interview presentation
@@ -229,7 +229,7 @@ When recording your 2-3 minute demo:
 
 If you encounter issues:
 1. Check this guide
-2. Review [README.md](README.md)
+2. Review [README.md](../README.md)
 3. Check [ARCHITECTURE.md](ARCHITECTURE.md) for system design
 4. Run tests to verify setup: `pytest`
 
