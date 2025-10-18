@@ -49,14 +49,20 @@ See [CROSS_PLATFORM_GUIDE.md](docs/CROSS_PLATFORM_GUIDE.md) for platform-specifi
 # Clone the repository
 git clone https://github.com/danbroz/Creatve-Automation-for-Scalable-Social-Ad-Campaigns.git
 cd Creatve-Automation-for-Scalable-Social-Ad-Campaigns
+```
 
+```bash
 # Set up environment
 cp .env.example .env
 # Edit .env file and add your OpenAI API key
+```
 
+```bash
 # Start the application
 docker-compose up --build
+```
 
+```bash
 # Access the web interface
 # Open browser to: http://localhost:8000
 ```
