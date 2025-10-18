@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Assets - Creative Automation Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">📁 Generated Campaign Assets</h1>
+            <p class="text-gray-600 mb-6">This folder contains all generated campaign assets organized by campaign.</p>
+            
+            <div id="folders" class="space-y-2">
+                <p class="text-gray-500">Loading campaigns...</p>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <a href="/dashboard" class="text-blue-600 hover:text-blue-700 font-medium">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // List all campaign folders
+        async function loadCampaigns() {
+            try {
+                const response = await fetch('/api/v1/stats');
+                const stats = await response.json();
+                
+                const foldersEl = document.getElementById('folders');
+                
+                if (stats.total === 0) {
+                    foldersEl.innerHTML = `
+                        <div class="text-center py-8">
+                            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                            </svg>
+                            <p class="text-gray-600 text-lg">No campaigns generated yet</p>
+                            <p class="text-gray-500 mt-2">Campaign assets will appear here after generation</p>
+                            <a href="/create-campaign.html" class="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                                Create Your First Campaign
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    foldersEl.innerHTML = `
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <h3 class="font-semibold text-blue-900 mb-2">📊 Campaign Statistics</h3>
+                            <p class="text-blue-700">
+                                <strong>${stats.total || 0}</strong> total campaigns | 
+                                <strong>${stats.completed || 0}</strong> completed
+                            </p>
+                            <p class="text-sm text-blue-600 mt-3">
+                                Campaign folders will appear here as they complete. 
+                                Check individual campaign detail pages for direct asset links.
+                            </p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading campaigns:', error);
+                document.getElementById('folders').innerHTML = `
+                    <p class="text-red-600">Error loading campaigns</p>
+                `;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadCampaigns);
+    </script>
+</body>
+</html>
+
