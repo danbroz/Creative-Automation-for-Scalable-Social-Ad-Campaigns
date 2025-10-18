@@ -371,7 +371,7 @@ async def list_output_folders():
                     # Get folder stats
                     folder_info = {
                         'name': item.name,
-                        'path': f'/output/{item.name}/',
+                        'path': f'/api/v1/browse/output/{item.name}',
                         'modified': datetime.fromtimestamp(item.stat().st_mtime).isoformat(),
                         'size_mb': sum(f.stat().st_size for f in item.rglob('*') if f.is_file()) / (1024*1024)
                     }
@@ -391,6 +391,130 @@ async def list_output_folders():
             'count': 0,
             'error': str(e)
         }
+
+@app.get("/api/v1/browse/output/{path:path}")
+async def browse_output_directory(path: str = ""):
+    """
+    Browse files and directories in the output folder.
+    Serves files and generates directory listings.
+    
+    Args:
+        path: Relative path within output directory
+        
+    Returns:
+        HTML directory listing or file content
+    """
+    from pathlib import Path as PathLib
+    from fastapi.responses import FileResponse, HTMLResponse
+    import mimetypes
+    
+    try:
+        # Sanitize and resolve path
+        output_dir = PathLib("output").resolve()
+        if path:
+            target_path = (output_dir / path).resolve()
+        else:
+            target_path = output_dir
+            
+        # Security check: ensure path is within output directory
+        if not str(target_path).startswith(str(output_dir)):
+            raise HTTPException(status_code=403, detail="Access denied")
+            
+        if not target_path.exists():
+            raise HTTPException(status_code=404, detail="Path not found")
+            
+        # If it's a file, serve it
+        if target_path.is_file():
+            return FileResponse(target_path)
+            
+        # If it's a directory, generate listing
+        if target_path.is_dir():
+            items = []
+            for item in sorted(target_path.iterdir()):
+                if item.name.startswith('.'):
+                    continue
+                    
+                item_info = {
+                    'name': item.name,
+                    'is_dir': item.is_dir(),
+                    'size': item.stat().st_size if item.is_file() else 0,
+                    'modified': datetime.fromtimestamp(item.stat().st_mtime).strftime('%Y-%m-%d %H:%M:%S')
+                }
+                items.append(item_info)
+            
+            # Generate HTML directory listing
+            breadcrumbs = path.split('/') if path else []
+            breadcrumb_html = '<a href="/api/v1/browse/output">output</a>'
+            current_path = ""
+            for crumb in breadcrumbs:
+                if crumb:
+                    current_path += f"/{crumb}" if current_path else crumb
+                    breadcrumb_html += f' / <a href="/api/v1/browse/output/{current_path}">{crumb}</a>'
+            
+            items_html = ""
+            for item in items:
+                icon = "📁" if item['is_dir'] else "📄"
+                size_str = f"{item['size'] / 1024:.1f} KB" if not item['is_dir'] else "-"
+                item_path = f"{path}/{item['name']}" if path else item['name']
+                items_html += f"""
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-3">
+                        <a href="/api/v1/browse/output/{item_path}" class="text-blue-600 hover:text-blue-800 flex items-center">
+                            <span class="mr-2">{icon}</span> {item['name']}
+                        </a>
+                    </td>
+                    <td class="px-6 py-3 text-gray-600">{size_str}</td>
+                    <td class="px-6 py-3 text-gray-500">{item['modified']}</td>
+                </tr>
+                """
+            
+            html_content = f"""
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Browse: {path or 'output'}</title>
+                <script src="https://cdn.tailwindcss.com"></script>
+            </head>
+            <body class="bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 py-8">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h1 class="text-2xl font-bold text-gray-900">📁 {breadcrumb_html}</h1>
+                            <p class="text-sm text-gray-500 mt-1">{len(items)} items</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50 border-b border-gray-200">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Size</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Modified</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    {items_html}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                            <a href="/output" class="text-blue-600 hover:text-blue-800">← Back to Asset Browser</a>
+                            <span class="mx-3 text-gray-300">|</span>
+                            <a href="/dashboard" class="text-blue-600 hover:text-blue-800">Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+            
+            return HTMLResponse(content=html_content)
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Background processing functions
 
