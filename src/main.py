@@ -106,6 +106,11 @@ class CreativeAutomationPipeline:
             
             return True
             
+        except ValueError as e:
+            # Re-raise ValueError (content filter violations) with detailed message
+            self.logger.error("Content filter violation", e)
+            self.performance_monitor.stop_timer()
+            raise e
         except Exception as e:
             self.logger.error("Pipeline execution failed", e)
             self.performance_monitor.stop_timer()
@@ -160,9 +165,22 @@ class CreativeAutomationPipeline:
                 self.logger.warning(f"  - '{violation_type}' ({violation_desc}) detected in context: '{violation_context[:100]}...'")
                 self.logger.info(f"    Suggestions: {', '.join(violation_suggestions)}")
             
-            # For now, continue with warnings but log the issues
-            self.logger.warning("Continuing with campaign generation but compliance issues noted")
-            return True  # Changed to True to allow generation but with warnings
+            # Build detailed error message for user
+            error_details = []
+            for violation in all_violations:
+                violation_type = violation.get('type', violation.get('word', 'unknown'))
+                violation_desc = violation.get('description', violation.get('word', 'Content violation'))
+                violation_suggestions = violation.get('suggestions', ['Review content'])
+                
+                error_details.append(f"• {violation_type}: {violation_desc}")
+                if violation_suggestions:
+                    error_details.append(f"  Suggestions: {', '.join(violation_suggestions)}")
+            
+            error_message = f"Content Filter Violations Detected:\n" + "\n".join(error_details)
+            self.logger.error(error_message)
+            
+            # Fail the pipeline with clear explanation
+            raise ValueError(error_message)
     
     def _process_product(self, product: dict, brief, campaign_dir: Path) -> None:
         """Process a single product through the pipeline."""
