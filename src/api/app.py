@@ -342,13 +342,82 @@ async def list_campaign_assets(campaign_id: str):
 @app.get("/api/v1/stats", dependencies=[Depends(verify_api_key)])
 async def get_statistics():
     """
-    Get queue and processing statistics.
+    Get queue and processing statistics combined with filesystem campaigns.
     
     Returns:
         Dict: Statistics including queue size, success rate, etc.
     """
-    stats = campaign_queue.get_statistics()
-    return stats
+    # Get in-memory queue stats
+    queue_stats = campaign_queue.get_statistics()
+    
+    # Scan output directory for completed campaigns
+    from pathlib import Path as PathLib
+    import os
+    
+    output_dir = PathLib("output")
+    filesystem_campaigns = []
+    
+    if output_dir.exists():
+        for item in output_dir.iterdir():
+            if item.is_dir() and not item.name.startswith('.') and item.name != 'index.html':
+                # Check if campaign has summary file (indicates completion)
+                summary_file = item / "campaign_summary.json"
+                execution_file = item / "execution_report.json"
+                
+                if summary_file.exists() or execution_file.exists():
+                    import json
+                    campaign_data = {
+                        'job_id': f'fs_{item.name}',
+                        'campaign_name': item.name,
+                        'status': 'completed',
+                        'created_at': datetime.fromtimestamp(item.stat().st_ctime).isoformat(),
+                        'started_at': datetime.fromtimestamp(item.stat().st_ctime).isoformat(),
+                        'completed_at': datetime.fromtimestamp(item.stat().st_mtime).isoformat(),
+                        'brief_path': f'output/{item.name}/campaign_summary.json',
+                        'source': 'filesystem'
+                    }
+                    
+                    # Try to read summary for more details
+                    try:
+                        if summary_file.exists():
+                            with open(summary_file, 'r') as f:
+                                summary = json.load(f)
+                                campaign_data['campaign_name'] = summary.get('campaign_name', item.name)
+                    except:
+                        pass
+                    
+                    filesystem_campaigns.append(campaign_data)
+    
+    # Combine queue campaigns and filesystem campaigns
+    all_campaigns = list(queue_stats.get('recent_campaigns', []))
+    
+    # Add filesystem campaigns that aren't in the queue
+    queue_ids = {c.get('job_id') for c in all_campaigns}
+    for fs_campaign in filesystem_campaigns:
+        if fs_campaign['job_id'] not in queue_ids:
+            all_campaigns.append(fs_campaign)
+    
+    # Sort by completed time (most recent first)
+    all_campaigns.sort(key=lambda x: x.get('completed_at', x.get('created_at', '')), reverse=True)
+    
+    # Recalculate totals
+    filesystem_completed = len(filesystem_campaigns)
+    total_completed = queue_stats.get('completed', 0) + filesystem_completed
+    total_campaigns = queue_stats.get('total', 0) + filesystem_completed
+    
+    # Update stats
+    combined_stats = {
+        'total': total_campaigns,
+        'pending': queue_stats.get('pending', 0),
+        'in_progress': queue_stats.get('in_progress', 0),
+        'completed': total_completed,
+        'failed': queue_stats.get('failed', 0),
+        'recent_campaigns': all_campaigns[:10],  # Limit to 10 most recent
+        'filesystem_campaigns': filesystem_completed,
+        'queue_campaigns': queue_stats.get('total', 0)
+    }
+    
+    return combined_stats
 
 @app.get("/api/v1/output/folders")
 async def list_output_folders():
