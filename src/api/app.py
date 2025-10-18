@@ -366,6 +366,8 @@ async def get_statistics():
                 
                 if summary_file.exists() or execution_file.exists():
                     import json
+                    
+                    # Default to filesystem timestamps as fallback
                     campaign_data = {
                         'job_id': f'fs_{item.name}',
                         'campaign_name': item.name,
@@ -377,12 +379,31 @@ async def get_statistics():
                         'source': 'filesystem'
                     }
                     
-                    # Try to read summary for more details
+                    # Try to read execution report for accurate timestamps
+                    try:
+                        if execution_file.exists():
+                            with open(execution_file, 'r') as f:
+                                execution = json.load(f)
+                                exec_summary = execution.get('execution_summary', {})
+                                if exec_summary.get('start_time'):
+                                    campaign_data['started_at'] = exec_summary['start_time']
+                                if exec_summary.get('end_time'):
+                                    campaign_data['completed_at'] = exec_summary['end_time']
+                                # Use start_time as created_at if available
+                                if exec_summary.get('start_time'):
+                                    campaign_data['created_at'] = exec_summary['start_time']
+                    except Exception as e:
+                        pass
+                    
+                    # Try to read summary for campaign name and generated_at
                     try:
                         if summary_file.exists():
                             with open(summary_file, 'r') as f:
                                 summary = json.load(f)
                                 campaign_data['campaign_name'] = summary.get('campaign_name', item.name)
+                                # Use generated_at as completed_at if execution report not available
+                                if summary.get('generated_at') and not execution_file.exists():
+                                    campaign_data['completed_at'] = summary['generated_at']
                     except:
                         pass
                     
