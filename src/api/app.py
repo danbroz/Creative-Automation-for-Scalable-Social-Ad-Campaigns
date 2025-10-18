@@ -63,15 +63,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files (must be done after middleware but before routes)
-app.mount("/static", StaticFiles(directory="web/static"), name="static")
-
-# Mount output directory for viewing generated assets
-# Create output directory if it doesn't exist
-from pathlib import Path as PathLib
-PathLib("output").mkdir(parents=True, exist_ok=True)
-app.mount("/output", StaticFiles(directory="output", html=True), name="output")
-
 # Global campaign queue
 campaign_queue = CampaignQueue()
 
@@ -410,6 +401,17 @@ async def process_batch_async(campaign_ids: List[str]):
         job = campaign_queue.get_job(campaign_id)
         if job:
             await process_campaign_async(campaign_id, job.brief_path)
+
+# Mount static files and directories at the end (after all routes)
+# This prevents route conflicts
+from pathlib import Path as PathLib
+
+# Ensure output directory exists
+PathLib("output").mkdir(parents=True, exist_ok=True)
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="web/static"), name="static")
+app.mount("/output", StaticFiles(directory="output", html=True), name="output")
 
 # Run server if executed directly
 if __name__ == "__main__":
