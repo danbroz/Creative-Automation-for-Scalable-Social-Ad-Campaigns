@@ -350,6 +350,48 @@ async def get_statistics():
     stats = campaign_queue.get_statistics()
     return stats
 
+@app.get("/api/v1/output/folders")
+async def list_output_folders():
+    """
+    List all campaign folders in the output directory.
+    
+    Returns:
+        Dict: List of campaign folders with metadata
+    """
+    try:
+        import os
+        from pathlib import Path as PathLib
+        
+        output_dir = PathLib("output")
+        folders = []
+        
+        if output_dir.exists():
+            for item in output_dir.iterdir():
+                if item.is_dir() and not item.name.startswith('.'):
+                    # Get folder stats
+                    folder_info = {
+                        'name': item.name,
+                        'path': f'/output/{item.name}/',
+                        'modified': datetime.fromtimestamp(item.stat().st_mtime).isoformat(),
+                        'size_mb': sum(f.stat().st_size for f in item.rglob('*') if f.is_file()) / (1024*1024)
+                    }
+                    folders.append(folder_info)
+        
+        # Sort by modified date (newest first)
+        folders.sort(key=lambda x: x['modified'], reverse=True)
+        
+        return {
+            'folders': folders,
+            'count': len(folders)
+        }
+        
+    except Exception as e:
+        return {
+            'folders': [],
+            'count': 0,
+            'error': str(e)
+        }
+
 # Background processing functions
 
 async def process_campaign_async(job_id: str, brief_path: str):
