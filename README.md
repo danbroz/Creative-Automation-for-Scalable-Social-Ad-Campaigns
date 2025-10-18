@@ -79,9 +79,6 @@ source venv/bin/activate
 # Install dependencies
 pip install -r requirements.txt
 
-# For development (includes testing tools)
-pip install -r requirements-dev.txt
-
 # Set up environment
 cp .env.example .env
 # Edit .env file and add your OpenAI API key
