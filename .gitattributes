@@ -1,0 +1,40 @@
+# Git attributes for cross-platform compatibility
+# Ensures consistent line endings across Windows, Linux, and macOS
+
+# Auto-detect text files and normalize line endings to LF in repository
+* text=auto
+
+# Force LF for shell scripts (Linux/Mac)
+*.sh text eol=lf
+
+# Force CRLF for Windows batch files
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Force LF for Python files (standard across all platforms)
+*.py text eol=lf
+
+# Force LF for web files
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Force LF for Docker files
+Dockerfile text eol=lf
+docker-compose.yml text eol=lf
+
+# Binary files - never modify
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.db binary
+*.sqlite binary
+*.pyc binary
+
