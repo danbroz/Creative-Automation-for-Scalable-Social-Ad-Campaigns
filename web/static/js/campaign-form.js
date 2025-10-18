@@ -242,15 +242,25 @@ class CampaignForm {
         switch (step) {
             case 1:
                 this.formData.products = this.getProducts();
+                console.log('Step 1 - Products saved:', this.formData.products);
                 break;
             case 2:
                 this.formData.target_region = document.getElementById('target-region')?.value || '';
                 this.formData.target_audience = document.getElementById('target-audience')?.value || '';
                 this.formData.language = document.getElementById('language-select')?.value || 'en';
+                console.log('Step 2 - Targeting saved:', {
+                    region: this.formData.target_region,
+                    audience: this.formData.target_audience,
+                    language: this.formData.language
+                });
                 break;
             case 3:
                 this.formData.campaign_message = document.getElementById('campaign-message')?.value || '';
                 this.formData.campaign_name = document.getElementById('campaign-name')?.value || '';
+                console.log('Step 3 - Message saved:', {
+                    message: this.formData.campaign_message,
+                    name: this.formData.campaign_name
+                });
                 break;
         }
     }
@@ -408,23 +418,33 @@ class CampaignForm {
      * Submit form to API
      */
     async submitForm() {
+        console.log('Submit form clicked');
         Utils.showLoading(true, 'Creating campaign...');
         
         try {
             // Save all step data
             this.saveStepData(this.currentStep);
             
+            console.log('Form data:', this.formData);
+            
             // Validate entire form
             const validation = this.api.validateBrief(this.formData);
+            console.log('Validation result:', validation);
+            
             if (!validation.valid) {
-                throw new Error(validation.errors.join(', '));
+                console.error('Validation errors:', validation.errors);
+                Utils.showLoading(false);
+                Utils.showToast(`Validation Error: ${validation.errors[0]}`, 'error', 5000);
+                return;
             }
             
             // Submit to API
+            console.log('Submitting to API...');
             const response = await this.api.createCampaign(this.formData);
+            console.log('API Response:', response);
             
             Utils.showLoading(false);
-            Utils.showToast('Campaign created successfully!', 'success');
+            Utils.showToast('Campaign created successfully!', 'success', 2000);
             
             // Clear draft
             this.clearDraft();
@@ -432,11 +452,12 @@ class CampaignForm {
             // Redirect to campaign detail page
             setTimeout(() => {
                 window.location.href = `campaign-detail.html?id=${response.campaign_id}`;
-            }, 1000);
+            }, 1500);
             
         } catch (error) {
+            console.error('Submit error:', error);
             Utils.showLoading(false);
-            Utils.showToast(`Error: ${error.message}`, 'error');
+            Utils.showToast(`Error: ${error.message}`, 'error', 5000);
         }
     }
 
