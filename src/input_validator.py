@@ -191,8 +191,15 @@ class InputValidator:
         )
         
         # Get optional campaign name
-        campaign_name = brief_data.get('campaign_name', 'default_campaign')
-        campaign_name = InputValidator.sanitize_filename(campaign_name)
+        campaign_name = brief_data.get('campaign_name', '')
+        
+        # If campaign_name is empty or None, generate a default name
+        if not campaign_name or campaign_name.strip() == '':
+            # Generate default name from timestamp
+            from datetime import datetime
+            campaign_name = f"campaign_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        else:
+            campaign_name = InputValidator.sanitize_filename(campaign_name)
         
         return {
             'campaign_name': campaign_name,
