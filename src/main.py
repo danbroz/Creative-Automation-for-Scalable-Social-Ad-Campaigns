@@ -150,9 +150,15 @@ class CreativeAutomationPipeline:
             self.logger.warning(f"Found {total_violations} compliance issue(s)")
             
             for violation in all_violations:
-                self.logger.track_legal_flag(violation['word'], brief.campaign_message)
-                self.logger.warning(f"  - '{violation['word']}' detected in context: '{violation['context']}'")
-                self.logger.info(f"    Suggestions: {', '.join(violation['suggestions'])}")
+                # Handle both old word-based and new AI-based violation formats
+                violation_type = violation.get('type', violation.get('word', 'unknown'))
+                violation_desc = violation.get('description', violation.get('word', 'Content violation'))
+                violation_context = violation.get('context', brief.campaign_message)
+                violation_suggestions = violation.get('suggestions', ['Review content'])
+                
+                self.logger.track_legal_flag(violation_type, brief.campaign_message)
+                self.logger.warning(f"  - '{violation_type}' ({violation_desc}) detected in context: '{violation_context[:100]}...'")
+                self.logger.info(f"    Suggestions: {', '.join(violation_suggestions)}")
             
             # For now, continue with warnings but log the issues
             self.logger.warning("Continuing with campaign generation but compliance issues noted")
