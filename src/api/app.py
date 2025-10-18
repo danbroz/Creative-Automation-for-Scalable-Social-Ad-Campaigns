@@ -78,7 +78,7 @@ class ProductModel(BaseModel):
 class CampaignBriefModel(BaseModel):
     """Campaign brief model."""
     campaign_name: Optional[str] = Field(None, description="Campaign name")
-    products: List[ProductModel] = Field(..., min_items=2, description="List of products")
+    products: List[ProductModel] = Field(..., min_items=1, description="List of products (minimum 1)")
     target_region: str = Field(..., description="Target region")
     target_audience: str = Field(..., description="Target audience")
     campaign_message: str = Field(..., max_length=500, description="Campaign message")
