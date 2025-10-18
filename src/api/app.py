@@ -67,6 +67,9 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="web/static"), name="static")
 
 # Mount output directory for viewing generated assets
+# Create output directory if it doesn't exist
+from pathlib import Path as PathLib
+PathLib("output").mkdir(parents=True, exist_ok=True)
 app.mount("/output", StaticFiles(directory="output", html=True), name="output")
 
 # Global campaign queue
