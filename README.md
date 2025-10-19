@@ -43,7 +43,7 @@ See [CROSS_PLATFORM_GUIDE.md](docs/CROSS_PLATFORM_GUIDE.md) for platform-specifi
 
 ### 🐳 Docker Method (Recommended - Works on All Platforms)
 
-**Prerequisites:** Install [Docker Desktop](https://www.docker.com/products/docker-desktop) for your platform.
+**Prerequisites:** Install [Docker Desktop](https://www.docker.com/products/docker-desktop) for your platform or Docker Compose
 
 ```bash
 # Clone the repository
