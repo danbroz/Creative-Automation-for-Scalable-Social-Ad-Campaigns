@@ -18,7 +18,8 @@ class CampaignBrief:
         products: List[Dict[str, str]],
         target_region: str,
         target_audience: str,
-        campaign_message: str
+        campaign_message: str,
+        target_languages: List[str] = None
     ):
         """
         Initialize campaign brief.
@@ -29,12 +30,14 @@ class CampaignBrief:
             target_region: Target region/market
             target_audience: Target audience description
             campaign_message: Campaign message text
+            target_languages: List of target language codes (e.g., ['en', 'es', 'fr'])
         """
         self.campaign_name = campaign_name
         self.products = products
         self.target_region = target_region
         self.target_audience = target_audience
         self.campaign_message = campaign_message
+        self.target_languages = target_languages if target_languages else ['en']
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert brief to dictionary."""
@@ -43,7 +46,8 @@ class CampaignBrief:
             'products': self.products,
             'target_region': self.target_region,
             'target_audience': self.target_audience,
-            'campaign_message': self.campaign_message
+            'campaign_message': self.campaign_message,
+            'target_languages': self.target_languages
         }
     
     def __repr__(self) -> str:
@@ -102,7 +106,8 @@ class BriefParser:
             products=validated_data['products'],
             target_region=validated_data['target_region'],
             target_audience=validated_data['target_audience'],
-            campaign_message=validated_data['campaign_message']
+            campaign_message=validated_data['campaign_message'],
+            target_languages=validated_data.get('target_languages', ['en'])
         )
     
     @staticmethod

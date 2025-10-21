@@ -18,6 +18,7 @@ from .image_processor import ImageProcessor
 from .compliance_checker import ComplianceChecker
 from .output_formatter import OutputFormatter
 from .performance_monitor import PerformanceMonitor
+from .translation.translator import Translator
 
 # Initialize colorama
 init(autoreset=True)
@@ -46,6 +47,15 @@ class CreativeAutomationPipeline:
             self.output_formatter = OutputFormatter()
             self.performance_monitor = PerformanceMonitor()
             
+            # Initialize translator (may fail if OPENAI_API_KEY not set)
+            try:
+                self.translator = Translator()
+                self.translation_enabled = True
+            except ValueError as e:
+                self.logger.warning(f"Translation disabled: {e}")
+                self.translator = None
+                self.translation_enabled = False
+            
         except Exception as e:
             self.logger.error("Failed to initialize pipeline components", e)
             raise
@@ -72,6 +82,13 @@ class CreativeAutomationPipeline:
             brief = self._parse_brief(brief_path)
             if not brief:
                 return False
+            
+            # Translate campaign message if needed
+            if self.translation_enabled and len(brief.target_languages) > 1:
+                self.logger.info(f"\nTranslating campaign message to {len(brief.target_languages)} languages...")
+                brief.translated_messages = self._translate_campaign_message(brief)
+            else:
+                brief.translated_messages = {'en': brief.campaign_message}
             
             # Step 2: Filter campaign message for legal compliance
             self.logger.info("\n[2/7] Checking legal compliance...")
@@ -123,10 +140,34 @@ class CreativeAutomationPipeline:
             self.logger.success(f"Campaign: {brief.campaign_name}")
             self.logger.info(f"Products: {len(brief.products)}")
             self.logger.info(f"Target: {brief.target_region} - {brief.target_audience}")
+            self.logger.info(f"Languages: {', '.join(brief.target_languages)}")
             return brief
         except Exception as e:
             self.logger.error(f"Failed to parse brief: {brief_path}", e)
             return None
+    
+    def _translate_campaign_message(self, brief) -> dict:
+        """Translate campaign message to all target languages."""
+        translations = {}
+        
+        for lang_code in brief.target_languages:
+            if lang_code == 'en':
+                # Use original message for English
+                translations[lang_code] = brief.campaign_message
+            else:
+                try:
+                    translation = self.translator.translate(
+                        text=brief.campaign_message,
+                        target_language=lang_code,
+                        source_language='en',
+                        context='marketing advertisement'
+                    )
+                    translations[lang_code] = translation
+                except Exception as e:
+                    self.logger.warning(f"Translation to {lang_code} failed: {e}")
+                    translations[lang_code] = brief.campaign_message
+        
+        return translations
     
     def _check_legal_compliance(self, brief) -> bool:
         """Check campaign message for legal compliance."""
@@ -219,20 +260,45 @@ class CreativeAutomationPipeline:
                 self.logger.track_image_generated(product_name, cost)
                 self.asset_manager.register_asset(product_name, asset_path, source='generated', cost=cost)
             
-            # Process image for all aspect ratios
-            self.logger.info(f"    Creating variants for 3 aspect ratios...")
-            processed_images = self.image_processor.process_image(
-                asset_path,
-                brief.campaign_message,
-                product_dir,
-                product_name
-            )
+            # Process image for all languages and aspect ratios
+            all_processed_images = []
+            translated_messages = getattr(brief, 'translated_messages', {'en': brief.campaign_message})
             
-            self.logger.success(f"    Created {len(processed_images)} variants")
+            for lang_code, translated_message in translated_messages.items():
+                if len(translated_messages) > 1:
+                    self.logger.info(f"    Creating {lang_code} variants for 3 aspect ratios...")
+                    lang_product_dir = product_dir / lang_code
+                else:
+                    self.logger.info(f"    Creating variants for 3 aspect ratios...")
+                    lang_product_dir = product_dir
+                
+                processed_images = self.image_processor.process_image(
+                    asset_path,
+                    translated_message,
+                    lang_product_dir,
+                    product_name
+                )
+                
+                all_processed_images.extend(processed_images)
+                
+                # Save metadata for each language variant
+                for img_path in processed_images:
+                    metadata = {
+                        'product_name': product_name,
+                        'campaign_name': brief.campaign_name,
+                        'language': lang_code,
+                        'message': translated_message,
+                        'aspect_ratio': img_path.parent.name,
+                        'source_asset': str(asset_path)
+                    }
+                    self.output_formatter.save_asset_metadata(img_path, metadata)
+            
+            total_variants = len(all_processed_images)
+            self.logger.success(f"    Created {total_variants} total variants ({len(translated_messages)} languages × 3 aspect ratios)")
             
             # Run compliance checks on first variant
             self.logger.info(f"    Running compliance checks...")
-            compliance_result = self.compliance_checker.check_compliance(processed_images[0])
+            compliance_result = self.compliance_checker.check_compliance(all_processed_images[0])
             
             self.logger.track_compliance_check(
                 compliance_result['compliant'],
@@ -245,17 +311,6 @@ class CreativeAutomationPipeline:
                 self.logger.warning(f"    Compliance score: {compliance_result['score']}")
                 for rec in compliance_result['recommendations']:
                     self.logger.info(f"      - {rec}")
-            
-            # Save metadata
-            for img_path in processed_images:
-                metadata = {
-                    'product_name': product_name,
-                    'campaign_name': brief.campaign_name,
-                    'aspect_ratio': img_path.parent.name,
-                    'compliance': compliance_result,
-                    'source_asset': str(asset_path)
-                }
-                self.output_formatter.save_asset_metadata(img_path, metadata)
             
         except Exception as e:
             self.logger.error(f"Failed to process product: {product_name}", e)

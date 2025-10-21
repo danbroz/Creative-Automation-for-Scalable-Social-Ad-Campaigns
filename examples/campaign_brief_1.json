@@ -12,6 +12,7 @@
   ],
   "target_region": "North America",
   "target_audience": "Health-conscious millennials aged 25-40 interested in wellness and sustainability",
-  "campaign_message": "Discover natural wellness with our premium organic tea collection"
+  "campaign_message": "Discover natural wellness with our premium organic tea collection",
+  "target_languages": ["en", "es", "fr"]
 }
 

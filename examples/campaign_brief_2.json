@@ -16,6 +16,7 @@
   ],
   "target_region": "Europe",
   "target_audience": "Tech enthusiasts and professionals aged 22-45 who value innovation and quality",
-  "campaign_message": "Elevate your tech experience with premium accessories designed for modern life"
+  "campaign_message": "Elevate your tech experience with premium accessories designed for modern life",
+  "target_languages": ["en", "fr", "de", "it"]
 }
 

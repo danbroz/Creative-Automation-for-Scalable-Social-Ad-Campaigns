@@ -12,6 +12,7 @@
   ],
   "target_region": "Global",
   "target_audience": "Gift shoppers looking for thoughtful, high-quality presents for loved ones",
-  "campaign_message": "Give the gift of thoughtful luxury this holiday season"
+  "campaign_message": "Give the gift of thoughtful luxury this holiday season",
+  "target_languages": ["en", "es", "fr", "de", "ja"]
 }
 

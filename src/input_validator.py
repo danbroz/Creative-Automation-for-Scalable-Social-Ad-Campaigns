@@ -154,6 +154,48 @@ class InputValidator:
         return validated_products
     
     @staticmethod
+    def validate_language_codes(language_codes: List[str]) -> List[str]:
+        """
+        Validate target language codes.
+        
+        Args:
+            language_codes: List of language codes
+            
+        Returns:
+            Validated list of language codes
+            
+        Raises:
+            ValueError: If language codes are invalid
+        """
+        # Supported language codes (from languages.json)
+        SUPPORTED_LANGUAGES = ['en', 'es', 'fr', 'de', 'it', 'pt', 'zh', 'zh-TW', 'ja', 'ko']
+        
+        if not isinstance(language_codes, list):
+            raise ValueError("target_languages must be a list")
+        
+        if len(language_codes) < 1:
+            raise ValueError("At least one target language required")
+        
+        validated_codes = []
+        for code in language_codes:
+            if not isinstance(code, str):
+                raise ValueError(f"Language code must be a string: {code}")
+            
+            code = code.strip().lower()
+            
+            # Handle special case for Traditional Chinese
+            if code in ['zh-tw', 'zh_tw']:
+                code = 'zh-TW'
+            
+            if code not in SUPPORTED_LANGUAGES:
+                raise ValueError(f"Unsupported language code: {code}. Supported: {', '.join(SUPPORTED_LANGUAGES)}")
+            
+            if code not in validated_codes:
+                validated_codes.append(code)
+        
+        return validated_codes
+    
+    @staticmethod
     def validate_campaign_brief(brief_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Validate and sanitize complete campaign brief.
@@ -201,11 +243,19 @@ class InputValidator:
         else:
             campaign_name = InputValidator.sanitize_filename(campaign_name)
         
+        # Validate optional target languages
+        target_languages = brief_data.get('target_languages', ['en'])
+        if target_languages:
+            target_languages = InputValidator.validate_language_codes(target_languages)
+        else:
+            target_languages = ['en']
+        
         return {
             'campaign_name': campaign_name,
             'products': validated_products,
             'target_region': target_region,
             'target_audience': target_audience,
-            'campaign_message': campaign_message
+            'campaign_message': campaign_message,
+            'target_languages': target_languages
         }
 
