@@ -262,6 +262,7 @@ class ImageProcessor:
         # Try primary font
         font_paths = [
             f"/System/Library/Fonts/{font_family}.ttf",  # macOS
+            f"/System/Library/Fonts/Supplemental/{font_family}.ttf",  # macOS Supplemental
             f"/usr/share/fonts/truetype/{font_family.lower()}/{font_family}.ttf",  # Linux
             f"/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",  # Linux fallback
             "Arial.ttf",  # Windows
@@ -272,6 +273,7 @@ class ImageProcessor:
         for fallback in font_fallbacks:
             font_paths.extend([
                 f"/System/Library/Fonts/{fallback}.ttf",
+                f"/System/Library/Fonts/Supplemental/{fallback}.ttf",
                 f"/usr/share/fonts/truetype/{fallback.lower()}/{fallback}.ttf",
                 f"{fallback}.ttf"
             ])
@@ -287,9 +289,11 @@ class ImageProcessor:
         try:
             # Try common Unicode fonts
             unicode_fonts = [
-                "/System/Library/Fonts/Arial Unicode MS.ttf",  # macOS
+                "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",  # macOS (correct path)
+                "/System/Library/Fonts/Arial Unicode MS.ttf",  # macOS alternative
                 "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",  # Linux
-                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"  # Linux
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",  # Linux
+                "/System/Library/Fonts/Supplemental/Arial.ttf"  # macOS Arial as last resort
             ]
             
             for unicode_font in unicode_fonts:

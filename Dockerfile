@@ -6,12 +6,16 @@ FROM python:3.11-slim as base
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies and fonts
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     libgl1 \
     libglib2.0-0 \
     curl \
+    fonts-liberation \
+    fonts-dejavu-core \
+    fonts-noto-cjk \
+    fonts-noto-cjk-extra \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
