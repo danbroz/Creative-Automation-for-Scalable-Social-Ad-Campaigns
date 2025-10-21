@@ -2,10 +2,10 @@
   "organic_green_tea": {
     "product_name": "Organic Green Tea",
     "created_at": "2025-10-17T14:15:46.208756",
-    "usage_count": 1,
+    "usage_count": 2,
     "asset_path": "assets/products/organic_green_tea.png",
     "source": "generated",
-    "last_used": "2025-10-17T14:15:46.208760",
+    "last_used": "2025-10-21T02:00:41.132800",
     "generation_cost": 0.04
   },
   "herbal_sleep_blend": {
