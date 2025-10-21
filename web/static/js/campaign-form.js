@@ -23,7 +23,7 @@ class CampaignForm {
             target_region: '',
             target_audience: '',
             campaign_message: '',
-            language: 'en'
+            target_languages: ['en']
         };
         
         this.init();
@@ -247,11 +247,13 @@ class CampaignForm {
             case 2:
                 this.formData.target_region = document.getElementById('target-region')?.value || '';
                 this.formData.target_audience = document.getElementById('target-audience')?.value || '';
-                this.formData.language = document.getElementById('language-select')?.value || 'en';
+                const selectedLanguage = document.getElementById('language-select')?.value || 'en';
+                // Always include English plus the selected language if different
+                this.formData.target_languages = selectedLanguage === 'en' ? ['en'] : ['en', selectedLanguage];
                 console.log('Step 2 - Targeting saved:', {
                     region: this.formData.target_region,
                     audience: this.formData.target_audience,
-                    language: this.formData.language
+                    target_languages: this.formData.target_languages
                 });
                 break;
             case 3:
@@ -282,7 +284,9 @@ class CampaignForm {
                     document.getElementById('target-audience').value = this.formData.target_audience;
                 }
                 if (document.getElementById('language-select')) {
-                    document.getElementById('language-select').value = this.formData.language;
+                    // Get the non-English language if present
+                    const nonEnglishLang = this.formData.target_languages?.find(lang => lang !== 'en') || 'en';
+                    document.getElementById('language-select').value = nonEnglishLang;
                 }
                 break;
             case 3:
@@ -401,7 +405,7 @@ class CampaignForm {
                     <h3 class="font-semibold text-lg mb-2">Targeting</h3>
                     <p><strong>Region:</strong> ${Utils.sanitizeHTML(this.formData.target_region)}</p>
                     <p><strong>Audience:</strong> ${Utils.sanitizeHTML(this.formData.target_audience)}</p>
-                    <p><strong>Language:</strong> ${Utils.getLanguageFlag(this.formData.language)} ${this.formData.language.toUpperCase()}</p>
+                    <p><strong>Languages:</strong> ${this.formData.target_languages.map(lang => `${Utils.getLanguageFlag(lang)} ${lang.toUpperCase()}`).join(', ')}</p>
                 </div>
                 
                 <div class="review-section">

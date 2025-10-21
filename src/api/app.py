@@ -79,7 +79,9 @@ class CampaignBriefModel(BaseModel):
     target_region: str = Field(..., description="Target region")
     target_audience: str = Field(..., description="Target audience")
     campaign_message: str = Field(..., max_length=500, description="Campaign message")
-    language: Optional[str] = Field("en", description="Target language code")
+    target_languages: Optional[List[str]] = Field(["en"], description="List of target language codes")
+    # Backward compatibility
+    language: Optional[str] = Field(None, description="Legacy single language code (deprecated, use target_languages)")
 
 class CampaignResponse(BaseModel):
     """Campaign creation response."""
@@ -203,6 +205,14 @@ async def create_campaign(brief: CampaignBriefModel):
         
         brief_path = temp_dir / f"{campaign_id}.json"
         brief_dict = brief.dict()
+        
+        # Backward compatibility: if language is provided but not target_languages
+        if brief_dict.get('language') and not brief_dict.get('target_languages'):
+            brief_dict['target_languages'] = [brief_dict['language']]
+        
+        # Remove deprecated language field
+        if 'language' in brief_dict:
+            del brief_dict['language']
         
         with open(brief_path, 'w') as f:
             json.dump(brief_dict, f, indent=2)
