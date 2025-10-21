@@ -276,7 +276,8 @@ class CreativeAutomationPipeline:
                     asset_path,
                     translated_message,
                     lang_product_dir,
-                    product_name
+                    product_name,
+                    lang_code
                 )
                 
                 all_processed_images.extend(processed_images)

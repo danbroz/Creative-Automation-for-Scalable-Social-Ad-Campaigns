@@ -121,7 +121,8 @@ class ImageProcessor:
         self,
         image_path: Path,
         text: str,
-        output_path: Path
+        output_path: Path,
+        language: str = "en"
     ) -> Path:
         """
         Add text overlay to image following brand guidelines.
@@ -148,15 +149,9 @@ class ImageProcessor:
         padding = text_config.get('padding', 40)
         max_width = int(img.width * text_config.get('max_width_percent', 80) / 100)
         
-        # Try to load brand font, fall back to default
+        # Try to load language-specific font, fall back to default
         font_size = font_config.get('size_heading', 72)
-        try:
-            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
-        except:
-            try:
-                font = ImageFont.truetype("Arial.ttf", font_size)
-            except:
-                font = ImageFont.load_default()
+        font = self._get_font_for_language(language, font_size)
         
         # Wrap text to fit width
         wrapped_text = self._wrap_text(text, font, max_width, draw)
@@ -240,12 +235,81 @@ class ImageProcessor:
         
         return '\n'.join(lines)
     
+    def _get_font_for_language(self, language: str, font_size: int):
+        """
+        Get appropriate font for the given language.
+        
+        Args:
+            language: Language code (e.g., 'en', 'zh', 'ja', 'ko')
+            font_size: Font size
+            
+        Returns:
+            PIL ImageFont object
+        """
+        # Load language configuration
+        try:
+            import json
+            with open('config/languages.json', 'r', encoding='utf-8') as f:
+                lang_config = json.load(f)
+            lang_info = lang_config.get('supported_languages', {}).get(language, {})
+        except:
+            lang_info = {}
+        
+        # Get font family and fallbacks
+        font_family = lang_info.get('font_family', 'Arial')
+        font_fallbacks = lang_info.get('font_fallbacks', [])
+        
+        # Try primary font
+        font_paths = [
+            f"/System/Library/Fonts/{font_family}.ttf",  # macOS
+            f"/usr/share/fonts/truetype/{font_family.lower()}/{font_family}.ttf",  # Linux
+            f"/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",  # Linux fallback
+            "Arial.ttf",  # Windows
+            "arial.ttf"   # Windows lowercase
+        ]
+        
+        # Add fallback fonts
+        for fallback in font_fallbacks:
+            font_paths.extend([
+                f"/System/Library/Fonts/{fallback}.ttf",
+                f"/usr/share/fonts/truetype/{fallback.lower()}/{fallback}.ttf",
+                f"{fallback}.ttf"
+            ])
+        
+        # Try each font path
+        for font_path in font_paths:
+            try:
+                return ImageFont.truetype(font_path, font_size)
+            except:
+                continue
+        
+        # If all else fails, try to use a system font that supports Unicode
+        try:
+            # Try common Unicode fonts
+            unicode_fonts = [
+                "/System/Library/Fonts/Arial Unicode MS.ttf",  # macOS
+                "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",  # Linux
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"  # Linux
+            ]
+            
+            for unicode_font in unicode_fonts:
+                try:
+                    return ImageFont.truetype(unicode_font, font_size)
+                except:
+                    continue
+        except:
+            pass
+        
+        # Last resort: default font
+        return ImageFont.load_default()
+    
     def process_image(
         self,
         input_path: Path,
         text: str,
         output_dir: Path,
-        product_name: str
+        product_name: str,
+        language: str = "en"
     ) -> List[Path]:
         """
         Process image for all aspect ratios with text overlay.
@@ -272,7 +336,7 @@ class ImageProcessor:
             
             # Add text overlay
             final_path = ratio_dir / f"{product_name}_final.png"
-            self.add_text_overlay(resized_path, text, final_path)
+            self.add_text_overlay(resized_path, text, final_path, language)
             
             processed_images.append(final_path)
             
